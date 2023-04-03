@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 02:54:54 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/01 03:08:12 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/03 22:15:04 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,20 @@ void	put_player(t_data *data, t_player *player)
 	int	y;
 	int	offset;
 
-	offset = 8;
-	x = 0;
-	y = 0;
-	printf("player x: %f, player y: %f \n", player->x, player->y);
-	while (x < offset)
+	offset = 4;
+	x = -4;
+	y = -4;
+	while (y < offset)
 	{
-		while (y < offset)
+		while (x < offset)
 		{
-			my_mlx_pixel_put(data, player->x + x, player->y + y, 0x0000FF00);
-			y++;
+			if (x * x + y * y <= offset * offset)
+				my_mlx_pixel_put(data, player->x + x + 4,
+					player->y + y + 4, 0x0000FF00);
+			x++;
 		}
-		y = 0;
-		x++;
+		x = -4;
+		y++;
 	}
 }
 
@@ -53,21 +54,39 @@ void	put_block(t_data *data, int x, int y, int color)
 	block_height = window_height / map_height;
 	block_width += x;
 	block_height += y;
-	while (y < block_height)
+	y++;
+	while (y < block_height - 1)
 	{
-		while (x < block_width)
+		while (x < block_width - 1)
 		{
 			my_mlx_pixel_put(data, x, y, color);
 			x++;
 		}
-		x = x - (window_width / map_width);
+		x = x - (window_width / map_width) + 1;
 		y++;
 	}
 }
 
-void	render_next_frame(t_var *data)
+void	put_direction(t_data *data, t_player *player)
 {
-	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
+	int	x;
+	int	y;
+	int	i;
+
+	i = 0;
+	x = player->x + 4;
+	y = player->y + 4;
+	while (i < 5)
+	{
+		x -= player->dx;
+		y -= player->dy;
+		my_mlx_pixel_put(data, x, y, 0x00FF0000);
+		my_mlx_pixel_put(data, x + 0.5, y, 0x00FF0000);
+		my_mlx_pixel_put(data, x, y + 0.5, 0x00FF0000);
+		my_mlx_pixel_put(data, x - 0.5, y, 0x00FF0000);
+		my_mlx_pixel_put(data, x, y - 0.5, 0x00FF0000);
+		i++;
+	}
 }
 
 void	draw_map(t_var *data)
@@ -90,8 +109,47 @@ void	draw_map(t_var *data)
 		j = 0;
 		i++;
 	}
+}
+
+void	render_next_frame(t_var *data)
+{
+	mlx_destroy_image(data->mlx, data->img.img);
+	data->img.img = mlx_new_image(data->mlx, window_width, window_height);
+	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
+			&data->img.line_length, &data->img.endian);
+	draw_map(data);
 	put_player(&data->img, &data->player);
-	render_next_frame(data);
+	put_direction(&data->img, &data->player);
+	mlx_put_image_to_window(data->mlx, data->mlx_win, data->img.img, 0, 0);
+}
+
+void	init_player(t_player *player, int i, int j)
+{
+	player->x = j * window_width / map_width + 1;
+	player->y = i * window_height / map_height + 1;
+	player->angle = 0;
+	player->dx = 0;
+	player->dy = 0;
+	if (map[i][j] == 'W')
+	{
+		player->angle = 3 * M_PI / 2;
+		player->dx = -1;
+	}
+	else if (map[i][j] == 'S')
+	{
+		player->angle = M_PI;
+		player->dy = 1;
+	}
+	else if (map[i][j] == 'E')
+	{
+		player->angle = M_PI / 2;
+		player->dx = 1;
+	}
+	else if (map[i][j] == 'N')
+	{
+		player->angle = 0;
+		player->dy = -1;
+	}
 }
 
 t_var	*init_data()
@@ -107,13 +165,9 @@ t_var	*init_data()
 	{
 		while (j < map_width)
 		{
-			if (map[i][j] == 'W')
-			{
-				data->player.x = j * window_width / map_width + 1;
-				data->player.y = i * window_height / map_height + 1;
-				data->player.dx = 0;
-				data->player.dy = 0;
-			}
+			if (map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E'
+					|| map[i][j] == 'N')
+				init_player(&data->player, j, i);
 			j++;
 		}
 		j = 0;
@@ -124,21 +178,35 @@ t_var	*init_data()
 
 int	key_press(int keycode, t_var *data)
 {
-	printf("keycode: %d \n", keycode);
 	if (keycode == 0 || keycode == 123)
-		data->player.x -= 5;
+	{
+		data->player.angle -= 0.15;
+		if (data->player.angle < 0)
+			data->player.angle += 2 * M_PI;
+	}
 	else if (keycode == 2 || keycode == 124)
-		data->player.x += 5;
+	{
+		data->player.angle += 0.15;
+		if (data->player.angle > 2 * M_PI)
+			data->player.angle += 2 * M_PI;
+	}
 	else if (keycode == 13 || keycode == 126)
-		data->player.y -= 5;
+	{
+		data->player.y -= data->player.dy;
+		data->player.x -= data->player.dx;
+	}
 	else if (keycode == 1 || keycode == 125)
-		data->player.y += 5;
+	{
+		data->player.y += data->player.dy;
+		data->player.x += data->player.dx;
+	}
 	else if (keycode == 53)
 		exit(0);
 	else
 		return (0);
-	printf("player x: %f, player y: %f \n", data->player.x, data->player.y);
-	draw_map(data);
+	data->player.dx = cos(data->player.angle) * 10;
+	data->player.dy = sin(data->player.angle) * 10;
+	render_next_frame(data);
 	return (0);
 }
 
