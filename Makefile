@@ -2,13 +2,15 @@ NAME = cub3d
 BONUS_NAME = cub3d_bonus
 CC = gcc
 
-SRC = main.c
+SRC = main.c init.c draw.c mouvement.c minimap.c rays.c distances.c
 
 BONUS_SRC = 
 
 OBJ = $(SRC:.c=.o) 
 
-BONUS_OBJ = $(BONUS_SRC:.c=.o) 
+BONUS_OBJ = $(BONUS_SRC:.c=.o)
+
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 
@@ -19,10 +21,10 @@ bonus: $(BONUS_OBJ)
 %.o: %.c 
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -Lmlx -lmlx -Ofast -framework OpenGL -framework AppKit -o $(NAME)
+	$(CC) $(OBJ) -g -fsanitize=address -Lmlx -lmlx -Ofast -framework OpenGL -framework AppKit -o $(NAME)
 
 %.o: %.c cub3d.h
-	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+	$(CC) $(FLAGS)  -Imlx -c $< -o $@
 
 clean:
 	rm -f $(OBJ) $(BONUS_OBJ)
