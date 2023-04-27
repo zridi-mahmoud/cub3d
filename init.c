@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:50:46 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/26 11:29:20 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/26 15:12:31 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ t_var	*init_data(char **map)
 	data->map = map;
 	data->mlx = mlx_init();
 	data->mlx_win = mlx_new_window(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT,
-			"CALL OF DUTY MODERN WARFARE 23");
+			"CALL OF DUTY MODERN WARFARE 23 BETA");
 	data->img.img = mlx_new_image(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 			&data->img.line_length, &data->img.endian);

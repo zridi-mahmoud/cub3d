@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:36:39 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/25 19:25:31 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/26 13:02:58 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_facing_up(float angle)
 {
-	return (angle > 0 && angle < M_PI);
+	return (angle > M_PI);
 }
 
 int	is_facing_left(float angle)

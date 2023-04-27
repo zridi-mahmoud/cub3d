@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/26 11:26:16 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/26 22:06:13 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include <math.h>
 # define FOV 1.0472
-# define WINDOW_HEIGHT 480
+# define WINDOW_HEIGHT 720
 # define WINDOW_WIDTH 1280
 # define MAP_WIDTH 15
 # define MAP_HEIGHT 10
@@ -29,7 +29,10 @@
 # define ROTATION_SPEED 0.1
 # define SKY_COLOR 0x00BFFF
 # define GROUND_COLOR 0x8B4513
-# define WALL_COLOR 0x00A0A0
+# define WALL_COLOR_D 0x006400
+# define WALL_COLOR_L 0x228B22
+# define WALL_COLOR_R 0x32CD32
+# define WALL_COLOR_U 0x00FF00
 
 typedef struct s_data {
 	void	*img;
@@ -91,5 +94,6 @@ void	draw_3d(t_var *data);
 int		is_facing_up(float angle);
 int		is_facing_left(float angle);
 void	put_point(t_data *data, int x, int y, int color);
+char	get_map_value(t_var *data, t_point point);
 
 #endif

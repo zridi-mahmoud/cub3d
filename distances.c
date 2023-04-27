@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:23:32 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/26 12:12:04 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/27 10:30:31 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,8 @@ t_point	dist_to_h_wall(t_var *data, t_ray *ray)
 	point = ith_h_inter(data, ray, i++);
 	if (is_facing_up(ray->angle))
 		point.y--;
-	else
-		point.y++;
+	// else
+	// 	point.y++;
 	while (point.x < WINDOW_WIDTH && point.y < WINDOW_HEIGHT
 		&& get_map_value(data, point) != '1')
 	{
@@ -138,8 +138,8 @@ t_point	dist_to_v_wall(t_var *data, t_ray *ray)
 	point = ith_v_inter(data, ray, i++);
 	if (is_facing_left(ray->angle))
 		point.x--;
-	else
-		point.x++;
+	// else
+	// 	point.x++;
 	while (point.x < WINDOW_WIDTH && point.y < WINDOW_HEIGHT
 		&& get_map_value(data, point) != '1')
 	{
@@ -154,14 +154,14 @@ t_point	dist_to_v_wall(t_var *data, t_ray *ray)
 	return (point);
 }
 
-double	distance(t_var *data, t_point point)
+double	distance(t_var *data, t_point point, t_ray *ray)
 {
 	double	x;
 	double	y;
 
 	x = data->player.x - point.x;
 	y = data->player.y - point.y;
-	return (sqrt(x * x + y * y));
+	return (sqrt(x * x + y * y) * cos(ray->angle - data->player.angle));
 }
 
 double	distance_wall(t_var *data, t_ray *ray)
@@ -171,37 +171,21 @@ double	distance_wall(t_var *data, t_ray *ray)
 
 	h_point = dist_to_h_wall(data, ray);
 	v_point = dist_to_v_wall(data, ray);
-	if (distance(data, h_point) < distance(data, v_point))
+	// TODO: hanlde when h_point and v_point are equal
+	if (distance(data, h_point, ray) <= distance(data, v_point, ray))
 	{
-		ray->type = 'h';
-		return (distance(data, h_point));
-	}
-	else
-	{
-		ray->type = 'v';
-		return (distance(data, v_point));
-	}
-}
-
-double distance_to_wall_vh(t_var *data, t_ray *ray)
-{
-	t_point	v_point;
-	t_point	h_point;
-	int		i;
-
-	i = 0;
-	v_point = ith_v_inter(data, ray, i);
-	h_point = ith_h_inter(data, ray, i);
-	while (get_map_value(data, v_point) != '1'
-		&& get_map_value(data, h_point) != '1')
-	{
-		if (distance(data, v_point) < distance(data, h_point))
-			v_point = ith_v_inter(data, ray, ++i);
+		if (ray->angle > 0 && ray->angle < M_PI)
+			ray->type = 'U';
 		else
-			h_point = ith_h_inter(data, ray, ++i);
+			ray->type = 'D';
+		return (distance(data, h_point, ray));
 	}
-	if (distance(data, v_point) < distance(data, h_point))
-		return (distance(data, v_point));
 	else
-		return (distance(data, h_point));
+	{
+		if (ray->angle > M_PI / 2 && ray->angle < 3 * M_PI / 2)
+			ray->type = 'L';
+		else
+			ray->type = 'R';
+		return (distance(data, v_point, ray));
+	}
 }
