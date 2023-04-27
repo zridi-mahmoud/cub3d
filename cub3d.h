@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/26 22:06:13 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/27 18:20:08 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # define MAP_HEIGHT 10
 # define MINIMAP_HEIGHT 100
 # define MINIMAP_WIDTH 200
-# define MOVE_SPEED 0.1
-# define ROTATION_SPEED 0.1
+# define MOVE_SPEED 5
+# define ROTATION_SPEED 0.05
 # define SKY_COLOR 0x00BFFF
 # define GROUND_COLOR 0x8B4513
 # define WALL_COLOR_D 0x006400
@@ -57,6 +57,8 @@ typedef struct s_player {
 	double	dx;
 	double	dy;
 	double	angle;
+	int		move_direction;
+	int		rotation_direction;
 }				t_player;
 
 typedef struct s_var {
@@ -82,7 +84,7 @@ void	draw_minimap(t_var *data);
 void	put_block_mini(t_data *data, int x, int y, int color);
 void	draw_rays(t_var *data);
 void	draw_ray(t_var *data, t_ray *ray);
-void	render_next_frame(t_var *data);
+int		render_next_frame(t_var *data);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 t_point	first_h_inter(t_var *data, t_ray *ray);
 t_point	ith_h_inter(t_var *data, t_ray *ray, int i);
@@ -95,5 +97,6 @@ int		is_facing_up(float angle);
 int		is_facing_left(float angle);
 void	put_point(t_data *data, int x, int y, int color);
 char	get_map_value(t_var *data, t_point point);
+int		key_release(int keycode, t_var *data);
 
 #endif

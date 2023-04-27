@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:36:39 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/26 13:02:58 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/27 18:18:23 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,6 @@ void	draw_ray(t_var *data, t_ray *ray)
 		my_mlx_pixel_put(&data->img, to_minmap(x, 0),
 			to_minmap(y, 1), 0x00FF0000);
 	}
-	// t_point wall;
-	// wall = point_wall(data, ray);
-	// for (int i=0; i < 4; i++)
-	// {
-	// 	my_mlx_pixel_put(&data->img, to_minmap(wall.x, 0),
-	// 		to_minmap(wall.y, 1), 0x00FFFF00);
-	// 	wall.x += ray->dx;
-	// 	wall.y += ray->dy;
-	// }
 }
 
 void	draw_rays(t_var *data)
@@ -65,5 +56,4 @@ void	draw_rays(t_var *data)
 		draw_ray(data, &ray);
 		i++;
 	}
-	// distances_walls(data);
 }
