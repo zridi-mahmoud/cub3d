@@ -6,21 +6,21 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:49:15 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/27 10:16:23 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/30 15:03:01 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	get_color (int type)
+int	get_color(t_ray *ray)
 {
-	if (type == 'D')
+	if (ray->type == 'D')
 		return (WALL_COLOR_D);
-	else if (type == 'U')
+	else if (ray->type == 'U')
 		return (WALL_COLOR_U);
-	else if (type == 'L')
+	else if (ray->type == 'L')
 		return (WALL_COLOR_L);
-	else if (type == 'R')
+	else if (ray->type == 'R')
 		return (WALL_COLOR_R);
 	else
 		return (0);
@@ -44,7 +44,7 @@ void	draw_wall(t_var *data, int x, t_ray *ray)
 			my_mlx_pixel_put(&data->img, x, y, SKY_COLOR);
 		else if (y >= wall_top && y <= wall_bottom)
 		{
-			my_mlx_pixel_put(&data->img, x, y, get_color(ray->type));
+			my_mlx_pixel_put(&data->img, x, y, get_color(ray));
 		}
 		else
 			my_mlx_pixel_put(&data->img, x, y, GROUND_COLOR);
@@ -52,7 +52,7 @@ void	draw_wall(t_var *data, int x, t_ray *ray)
 	}
 }
 
-double normalize_angle(double angle)
+double	normalize_angle(double angle)
 {
 	angle = fmod(angle, 2 * M_PI);
 	if (angle < 0)
@@ -60,7 +60,7 @@ double normalize_angle(double angle)
 	return (angle);
 }
 
-void draw_3d(t_var *data)
+void	draw_3d(t_var *data)
 {
 	int		i;
 	t_ray	ray;

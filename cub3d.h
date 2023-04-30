@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/27 18:20:08 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/30 15:11:03 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@
 # define ROTATION_SPEED 0.05
 # define SKY_COLOR 0x00BFFF
 # define GROUND_COLOR 0x8B4513
-# define WALL_COLOR_D 0x006400
-# define WALL_COLOR_L 0x228B22
-# define WALL_COLOR_R 0x32CD32
-# define WALL_COLOR_U 0x00FF00
+# define WALL_COLOR_D 0x0000FF
+# define WALL_COLOR_U 0xFF0000
+# define WALL_COLOR_L 0x00FF00
+# define WALL_COLOR_R 0xFFFF00
 
 typedef struct s_data {
 	void	*img;
@@ -42,6 +42,11 @@ typedef struct s_data {
 	int		endian;
 }				t_data;
 
+typedef struct s_point {
+	double	x;
+	double	y;
+}	t_point;
+
 typedef struct s_ray {
 	double	x;
 	double	y;
@@ -49,6 +54,7 @@ typedef struct s_ray {
 	double	dx;
 	double	dy;
 	char	type;
+	t_point	wall;
 }				t_ray;
 
 typedef struct s_player {
@@ -57,8 +63,11 @@ typedef struct s_player {
 	double	dx;
 	double	dy;
 	double	angle;
-	int		move_direction;
+	int		v_move_direction;
+	int		h_move_direction;
 	int		rotation_direction;
+	int		last_mouse_x;
+	int		mouse_x;
 }				t_player;
 
 typedef struct s_var {
@@ -68,11 +77,6 @@ typedef struct s_var {
 	void		*mlx;
 	void		*mlx_win;
 }	t_var;
-
-typedef struct s_point {
-	double	x;
-	double	y;
-}	t_point;
 
 void	init_player(t_player *player, int i, int j, char dir);
 t_var	*init_data(char **map);
@@ -98,5 +102,6 @@ int		is_facing_left(float angle);
 void	put_point(t_data *data, int x, int y, int color);
 char	get_map_value(t_var *data, t_point point);
 int		key_release(int keycode, t_var *data);
+int		mouse_move(int x, int y, t_var *data);
 
 #endif

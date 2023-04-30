@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 02:54:54 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/27 18:22:49 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/30 15:08:43 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,19 @@ void	update_player(t_var *data)
 		data->player.angle -= 2 * M_PI;
 	else if (data->player.angle < 0)
 		data->player.angle += 2 * M_PI;
-	if (check_wall(data, data->player.move_direction))
+	data->player.dx = cos(data->player.angle) * MOVE_SPEED;
+	data->player.dy = sin(data->player.angle) * MOVE_SPEED;
+	if (check_wall(data, data->player.v_move_direction))
 	{
-		data->player.dx = cos(data->player.angle) * MOVE_SPEED;
-		data->player.dy = sin(data->player.angle) * MOVE_SPEED;
-		data->player.x += data->player.move_direction * data->player.dx;
-		data->player.y += data->player.move_direction * data->player.dy;
+		data->player.x += data->player.v_move_direction * data->player.dx;
+		data->player.y += data->player.v_move_direction * data->player.dy;
+	}
+	data->player.dx = cos(data->player.angle + M_PI / 2) * MOVE_SPEED;
+	data->player.dy = sin(data->player.angle + M_PI / 2) * MOVE_SPEED;
+	if (check_wall(data, data->player.h_move_direction))
+	{
+		data->player.x += data->player.h_move_direction * data->player.dx;
+		data->player.y += data->player.h_move_direction * data->player.dy;
 	}
 }
 
@@ -97,6 +104,13 @@ int	render_next_frame(t_var *data)
 	return (0);
 }
 
+	// char	*relative_path = "./test.xpm";
+	// int		img_width;
+	// int		img_height;
+
+	// mlx = mlx_init();
+	// img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
+
 int	main(void)
 {
 	t_var	*data;
@@ -108,7 +122,7 @@ int	main(void)
 		"10001011101101",
 		"10101011101101",
 		"10001011100001",
-		"10111011101101",
+		"10110011101101",
 		"10111011101111",
 		"100000000001",
 		"100000000001",
@@ -138,6 +152,45 @@ int	main(void)
 	data = init_data(map);
 	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
 	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
+	mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
 	mlx_loop(data->mlx);
+	return (0);
 }
+
+// int main(void)
+// {
+// 	void	*mlx;
+// 	void	*mlx_win;
+// 	void	*img;
+// 	int		img_width;
+// 	int		img_height;
+// 	int		bpp;
+// 	char	*relative_path = "./images/test1337.xpm";
+// 	int		size_line;
+// 	int		endian;
+
+// 	mlx = mlx_init();
+
+// 	mlx_win = mlx_new_window(mlx, 225, 225, "Hello world!");
+// 	img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
+// 	int *my_image_data =  (int *)mlx_get_data_addr(img, &bpp, &size_line, &endian);
+// 	for (int i = 0; i < img_height; i++)
+// 	{
+// 		for (int j = 0; j < img_width; j++)
+// 		{
+// 			my_image_data[i * img_width + j] = 0X00FF0000;
+// 			// my_image_data[j * size_line + i + 1] = 'd';
+// 			// my_image_data[j * size_line + i + 2] = 'd';
+// 		}
+// 	}
+// 	mlx_mouse_move(mlx_win, 115, 115);
+// 	printf("img_width = %d\n", img_width);
+// 	printf("img_height = %d\n", img_height);
+// 	printf("bpp = %d\n", bpp);
+// 	printf("size_line = %d\n", size_line);
+// 	printf("endian = %d\n", endian);
+// 	mlx_put_image_to_window(mlx, mlx_win, img, 0, 0);
+// 	mlx_loop(mlx);
+// 	return (0);
+// }

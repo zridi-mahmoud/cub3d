@@ -21,7 +21,7 @@ bonus: $(BONUS_OBJ)
 %.o: %.c 
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -g -fsanitize=address -Lmlx -lmlx -Ofast -framework OpenGL -framework AppKit -o $(NAME)
+	$(CC) $(OBJ) mlx/libmlx.a -g -fsanitize=address -Lmlx -lmlx -Ofast -framework OpenGL -framework AppKit -o $(NAME)
 
 %.o: %.c cub3d.h
 	$(CC) $(FLAGS)  -Imlx -c $< -o $@

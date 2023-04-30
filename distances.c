@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:23:32 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/27 10:30:31 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/30 14:51:41 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@ char	get_map_value(t_var *data, t_point point)
 	int	x;
 	int	y;
 
-	x = (int)point.x / (WINDOW_WIDTH / MAP_WIDTH);
-	y = (int)point.y / (WINDOW_HEIGHT / MAP_HEIGHT);
+	x = point.x / (WINDOW_WIDTH / MAP_WIDTH);
+	y = point.y / (WINDOW_HEIGHT / MAP_HEIGHT);
 	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT)
 		return ('1');
 	else
@@ -97,7 +97,7 @@ t_point	ith_v_inter(t_var *data, t_ray *ray, int i)
 	if (i == 0)
 		return (add_point_to_player(data, first, ray));
 	tan_alpha = fabs(tan(ray->angle));
-	point.x = (float)WINDOW_WIDTH / MAP_WIDTH;
+	point.x = (float)(WINDOW_WIDTH / MAP_WIDTH);
 	point.y = point.x * tan_alpha;
 	point.x = first.x + point.x * i;
 	point.y = first.y + point.y * i;
@@ -113,19 +113,16 @@ t_point	dist_to_h_wall(t_var *data, t_ray *ray)
 	point = ith_h_inter(data, ray, i++);
 	if (is_facing_up(ray->angle))
 		point.y--;
-	// else
-	// 	point.y++;
 	while (point.x < WINDOW_WIDTH && point.y < WINDOW_HEIGHT
 		&& get_map_value(data, point) != '1')
 	{
 		point = ith_h_inter(data, ray, i);
 		if (is_facing_up(ray->angle))
 			point.y--;
-		else
-			point.y++;
 		i++;
 	}
-	// put_point(&data->img, to_minmap(point.x, 0), to_minmap(point.y, 1), 0x00FFFF);
+	if (is_facing_up(ray->angle))
+		point.y++;
 	return (point);
 }
 
@@ -138,19 +135,16 @@ t_point	dist_to_v_wall(t_var *data, t_ray *ray)
 	point = ith_v_inter(data, ray, i++);
 	if (is_facing_left(ray->angle))
 		point.x--;
-	// else
-	// 	point.x++;
 	while (point.x < WINDOW_WIDTH && point.y < WINDOW_HEIGHT
 		&& get_map_value(data, point) != '1')
 	{
 		point = ith_v_inter(data, ray, i);
 		if (is_facing_left(ray->angle))
 			point.x--;
-		else
-			point.x++;
 		i++;
 	}
-	// put_point(&data->img, to_minmap(point.x, 0), to_minmap(point.y, 1), 0xFFFF00);
+	if (is_facing_left(ray->angle))
+		point.x++;
 	return (point);
 }
 
@@ -159,26 +153,31 @@ double	distance(t_var *data, t_point point, t_ray *ray)
 	double	x;
 	double	y;
 
+	(void)ray;
 	x = data->player.x - point.x;
 	y = data->player.y - point.y;
-	return (sqrt(x * x + y * y) * cos(ray->angle - data->player.angle));
+	return (sqrt(x * x + y * y));
 }
 
 double	distance_wall(t_var *data, t_ray *ray)
 {
 	t_point	h_point;
 	t_point	v_point;
+	double	dist_h;
+	double	dist_v;
 
 	h_point = dist_to_h_wall(data, ray);
 	v_point = dist_to_v_wall(data, ray);
-	// TODO: hanlde when h_point and v_point are equal
-	if (distance(data, h_point, ray) <= distance(data, v_point, ray))
+	dist_h = distance(data, h_point, ray);
+	dist_v = distance(data, v_point, ray);
+	if (dist_h <= dist_v)
 	{
-		if (ray->angle > 0 && ray->angle < M_PI)
+		if (ray->angle >= 0 && ray->angle < M_PI)
 			ray->type = 'U';
 		else
 			ray->type = 'D';
-		return (distance(data, h_point, ray));
+		ray->wall = h_point;
+		return (dist_h * cos(ray->angle - data->player.angle));
 	}
 	else
 	{
@@ -186,6 +185,7 @@ double	distance_wall(t_var *data, t_ray *ray)
 			ray->type = 'L';
 		else
 			ray->type = 'R';
-		return (distance(data, v_point, ray));
+		ray->wall = v_point;
+		return (dist_v * cos(ray->angle - data->player.angle));
 	}
 }

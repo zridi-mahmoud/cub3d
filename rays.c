@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:36:39 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/27 18:18:23 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/04/30 12:19:13 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,16 @@
 
 int	is_facing_up(float angle)
 {
-	return (angle > M_PI);
+	if (angle > M_PI)
+		return (1);
+	return (0);
 }
 
 int	is_facing_left(float angle)
 {
-	return (angle > M_PI_2 && angle < 3 * M_PI_2);
+	if (angle > M_PI_2 && angle < 3 * M_PI_2)
+		return (1);
+	return (0);
 }
 
 void	draw_ray(t_var *data, t_ray *ray)
