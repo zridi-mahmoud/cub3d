@@ -111,51 +111,60 @@ int	render_next_frame(t_var *data)
 	// mlx = mlx_init();
 	// img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
 
-int	main(void)
+int	main(int ac, char **av)
 {
-	t_var	*data;
-	int		j;
-	int		i;
-	char	*tmp_map[11] = {
-		"11111111111",
-		"1000E000001111",
-		"10001011101101",
-		"10101011101101",
-		"10001011100001",
-		"10110011101101",
-		"10111011101111",
-		"100000000001",
-		"100000000001",
-		"111111111111"
-	};
-	char	**map;
+	// t_var	*data;
+	// int		j;
+	// int		i;
+	// char	*tmp_map[11] = {
+	// 	"11111111111",
+	// 	"1000E000001111",
+	// 	"10001011101101",
+	// 	"10101011101101",
+	// 	"10001011100001",
+	// 	"10110011101101",
+	// 	"10111011101111",
+	// 	"100000000001",
+	// 	"100000000001",
+	// 	"111111111111"
+	// };
+	// char	**map;
 
-	i = 0;
-	map = (char **)malloc(sizeof(char *) * 11);
-	if (!map)
-		return (0);
-	while (tmp_map[i])
-	{
-		map[i] = (char *)malloc(sizeof(char) * 16);
-		if (!map[i])
-			return (0);
-		j = 0;
-		while (tmp_map[i][j])
-		{
-			map[i][j] = tmp_map[i][j];
-			j++;
-		}
-		map[i][j] = '\0';
-		i++;
-	}
-	map[i] = NULL;
-	data = init_data(map);
-	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
-	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
-	mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
-	mlx_loop_hook(data->mlx, render_next_frame, data);
-	mlx_loop(data->mlx);
+	// i = 0;
+	// map = (char **)malloc(sizeof(char *) * 11);
+	// if (!map)
+	// 	return (0);
+	// while (tmp_map[i])
+	// {
+	// 	map[i] = (char *)malloc(sizeof(char) * 16);
+	// 	if (!map[i])
+	// 		return (0);
+	// 	j = 0;
+	// 	while (tmp_map[i][j])
+	// 	{
+	// 		map[i][j] = tmp_map[i][j];
+	// 		j++;
+	// 	}
+	// 	map[i][j] = '\0';
+	// 	i++;
+	// }
+	// map[i] = NULL;
+	if (ac != 2) {
+    	printf("Usage: %s <map file>\n", av[0]);
+    	return 1;
+  	}
+  	if (is_valid_map(av[1])) {
+    	printf("Map is valid.\n");
+  	} else {
+    	printf("❌ Map is invalid.\n");
+  	}
 	return (0);
+	// data = init_data(map);
+	// mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
+	// mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
+	// mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
+	// mlx_loop_hook(data->mlx, render_next_frame, data);
+	// mlx_loop(data->mlx);
 }
 
 // int main(void)

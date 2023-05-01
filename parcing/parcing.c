@@ -149,7 +149,10 @@ int ft_checkIfClosed(t_cub3D *cub, t_line *head)
     while (head)
     {
         if (head->line[0] != '\n')
+        {
+            cub->first_line = i;
             break;
+        }
         head = head->next;
         i++;
         cub->first_line = i;
@@ -181,6 +184,7 @@ int ft_checkIfClosed(t_cub3D *cub, t_line *head)
 
 int is_valid_map( char *filename)
 {
+    t_var *data;
     t_cub3D *cub = malloc(sizeof(t_cub3D));
     t_line *head = NULL;
     t_line *current = NULL;
@@ -191,7 +195,6 @@ int is_valid_map( char *filename)
         printf("Error: could not open file.\n");
         return 0;
     }
-   
     while ((line = get_next_line(fd)))
     {
         t_line *new_node = (t_line *)malloc(sizeof(t_line));
@@ -230,21 +233,11 @@ int is_valid_map( char *filename)
         printf("Error: map is not closed.\n");
         return 0;
     }
+    data = init_data(cub->map_arr);
+    mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
+    mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
+    mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
+    mlx_loop_hook(data->mlx, render_next_frame, data);
+    mlx_loop(data->mlx);
     return 1;
-}
-
-
-int parcing(int argc, char *argv[]) {
-  if (argc != 2) {
-    printf("Usage: %s <map file>\n", argv[0]);
-    return 1;
-  }
-
-  if (is_valid_map(argv[1])) {
-    printf("Map is valid.\n");
-  } else {
-    printf("❌ Map is invalid.\n");
-  }
-
-  return 0;
 }
