@@ -2,7 +2,7 @@ NAME = cub3d
 BONUS_NAME = cub3d_bonus
 CC = gcc
 
-SRC = main.c init.c draw.c mouvement.c minimap.c rays.c distances.c
+SRC = main.c init.c draw.c mouvement.c minimap.c rays.c distances.c parcing/get_line.c parcing/pars_utils.c parcing/parcing.c
 
 BONUS_SRC = 
 
