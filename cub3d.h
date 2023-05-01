@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/01 23:01:29 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 00:21:30 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <math.h>
+#include <fcntl.h>
 # define FOV 1.0472
 # define WINDOW_HEIGHT 720
 # define WINDOW_WIDTH 1280
@@ -96,6 +97,23 @@ typedef struct s_var {
 	t_textures	textures;
 }	t_var;
 
+typedef struct s_line
+{
+    char *line;
+    struct s_line *next;
+}t_line;
+
+
+typedef struct cub3D_s
+{
+    int width;
+    int height;
+    int max_lenght;
+    char **map_arr;
+    t_line  *head;
+    int first_line;
+} t_cub3D;
+
 void	init_player(t_player *player, int i, int j, char dir);
 t_var	*init_data(char **map, char **paths);
 int		check_wall(t_var *data, int i);
@@ -124,4 +142,30 @@ int		mouse_move(int x, int y, t_var *data);
 int		get_wall_color(t_var *data, t_ray ray, int y, int wall_height);
 int		check_wall_h(t_var *data, int i);
 
+//parce
+char	*get_next_line(int fd);
+char	*ft_strjoin(char  *s1, char  *s2);
+char	*ft_strtrim(char **s1, char  *set);
+int		ft_strlen(char *s);
+char	*get_line(int fd);
+int		ft_lstsize(t_line *lst);
+void	ft_lsttoarray(t_line *map, t_cub3D *cub);
+char	*rightpad(char *str, int n);
+void	leftpad(char *str);
+void	fill_map(t_cub3D *cub, t_line *head);
+int		ft_checkLine(char *line);
+void	fill_map_back(t_cub3D *cub, t_line *head);
+int		ft_checkForSpaces(t_cub3D *cub);
+int		ft_checkWall(t_cub3D *cub);
+int		ft_checkIfClosed(t_cub3D *cub, t_line *head);
+int		is_valid_map( char *filename);
+size_t	ft_strlcpy(char *dst, char *src, size_t dstsize);
+char	*ft_strcpy(char *dest, const char *src);
+char	*ft_strdup(char *src);
+// static int	ft_count(char *dest);
+char	*ft_strcat(char *dest, char *src);
+// static int	min(size_t a, size_t b);
+char	*ft_substr(char *s, unsigned int start, size_t len);
+// static int	ft_check(char const *set, char c);
+char	*ft_strtrim(char **s1, char *set);
 #endif
