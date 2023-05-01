@@ -138,7 +138,6 @@ int		ft_checkForSpaces(t_cub3D *cub);
 int		ft_checkWall(t_cub3D *cub);
 int		ft_checkIfClosed(t_cub3D *cub, t_line *head);
 int		is_valid_map( char *filename);
-int		parcing(int argc, char *argv[]);
 size_t	ft_strlcpy(char *dst, char *src, size_t dstsize);
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strdup(char *src);
