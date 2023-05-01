@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 02:54:54 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/30 15:08:43 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/01 15:57:58 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,6 @@ int	render_next_frame(t_var *data)
 	return (0);
 }
 
-	// char	*relative_path = "./test.xpm";
-	// int		img_width;
-	// int		img_height;
-
-	// mlx = mlx_init();
-	// img = mlx_xpm_file_to_image(mlx, relative_path, &img_width, &img_height);
-
 int	main(void)
 {
 	t_var	*data;
@@ -129,6 +122,12 @@ int	main(void)
 		"111111111111"
 	};
 	char	**map;
+	char	*relative_paths[5] = {
+		"./textures/test1337.xpm",
+		"./textures/test1337 copy.xpm",
+		"./textures/test1337 copy 2.xpm",
+		"./textures/test1337 copy 3.xpm"
+	};
 
 	i = 0;
 	map = (char **)malloc(sizeof(char *) * 11);
@@ -149,10 +148,10 @@ int	main(void)
 		i++;
 	}
 	map[i] = NULL;
-	data = init_data(map);
+	data = init_data(map, relative_paths);
 	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
 	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
-	mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
+	// mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
 	mlx_loop(data->mlx);
 	return (0);
@@ -166,7 +165,7 @@ int	main(void)
 // 	int		img_width;
 // 	int		img_height;
 // 	int		bpp;
-// 	char	*relative_path = "./images/test1337.xpm";
+// 	char	*relative_path = "./textures/test1337.xpm";
 // 	int		size_line;
 // 	int		endian;
 
@@ -184,7 +183,6 @@ int	main(void)
 // 			// my_image_data[j * size_line + i + 2] = 'd';
 // 		}
 // 	}
-// 	mlx_mouse_move(mlx_win, 115, 115);
 // 	printf("img_width = %d\n", img_width);
 // 	printf("img_height = %d\n", img_height);
 // 	printf("bpp = %d\n", bpp);

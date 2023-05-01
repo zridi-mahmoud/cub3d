@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/30 15:11:03 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/01 12:12:06 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,16 +70,34 @@ typedef struct s_player {
 	int		mouse_x;
 }				t_player;
 
+typedef struct s_texture {
+	void	*img;
+	int		*data;
+	int		width;
+	int		height;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}				t_texture;
+
+typedef struct s_textures {
+	t_texture	north;
+	t_texture	south;
+	t_texture	east;
+	t_texture	west;
+}				t_textures;
+
 typedef struct s_var {
 	t_data		img;
 	t_player	player;
 	char		**map;
 	void		*mlx;
 	void		*mlx_win;
+	t_textures	textures;
 }	t_var;
 
 void	init_player(t_player *player, int i, int j, char dir);
-t_var	*init_data(char **map);
+t_var	*init_data(char **map, char **paths);
 int		check_wall(t_var *data, int i);
 int		key_press(int keycode, t_var *data);
 int		to_minmap(int x, int y);
@@ -103,5 +121,6 @@ void	put_point(t_data *data, int x, int y, int color);
 char	get_map_value(t_var *data, t_point point);
 int		key_release(int keycode, t_var *data);
 int		mouse_move(int x, int y, t_var *data);
+int		get_wall_color(t_var *data, t_ray ray, int y, int wall_height);
 
 #endif

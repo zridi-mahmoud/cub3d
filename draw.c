@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:49:15 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/30 15:03:01 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/01 16:08:41 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ void	draw_wall(t_var *data, int x, t_ray *ray)
 			my_mlx_pixel_put(&data->img, x, y, SKY_COLOR);
 		else if (y >= wall_top && y <= wall_bottom)
 		{
-			my_mlx_pixel_put(&data->img, x, y, get_color(ray));
+			// my_mlx_pixel_put(&data->img, x, y, get_color(ray));
+			my_mlx_pixel_put(&data->img, x, y, get_wall_color(data, *ray, y - wall_top, wall_top - wall_bottom));
+			// printf("ray wall x: %f wall y: %f\n", ray->wall.x, ray->wall.y);
+			// get_wall_color(data, *ray, y, wall_height);
 		}
 		else
 			my_mlx_pixel_put(&data->img, x, y, GROUND_COLOR);
