@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:36:39 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/30 12:19:13 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/01 19:55:22 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ void	draw_ray(t_var *data, t_ray *ray)
 {
 	float	x;
 	float	y;
+	int		i;
 
 	x = ray->x;
 	y = ray->y;
-	while (data->map[(int)y / (WINDOW_HEIGHT / MAP_HEIGHT)]
-		[(int)x / (WINDOW_WIDTH / MAP_WIDTH)] != '1')
+	i = 0;
+	while (i++ < 50)
 	{
 		x += ray->dx;
 		y += ray->dy;
@@ -49,12 +50,12 @@ void	draw_rays(t_var *data)
 	t_ray	ray;
 
 	i = 0;
-	while (data->player.angle - (FOV / 2) + 0.01 * i
-		< data->player.angle + (FOV / 2))
+	while (data->player.angle - 0.03 + 0.01 * i
+		< data->player.angle + 0.03)
 	{
 		ray.x = data->player.x + 4;
 		ray.y = data->player.y + 4;
-		ray.angle = data->player.angle - (FOV / 2) + 0.01 * i;
+		ray.angle = data->player.angle - 0.03 + 0.01 * i;
 		ray.dx = cos(ray.angle);
 		ray.dy = sin(ray.angle);
 		draw_ray(data, &ray);

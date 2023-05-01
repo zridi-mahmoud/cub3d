@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 02:54:54 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/01 15:57:58 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 00:18:50 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	put_block(t_data *data, int x, int y, int color)
 	int	block_width;
 	int	block_height;
 
-	x *= WINDOW_WIDTH / MAP_WIDTH;
-	y *= WINDOW_HEIGHT / MAP_HEIGHT;
-	block_width = WINDOW_WIDTH / MAP_WIDTH;
-	block_height = WINDOW_HEIGHT / MAP_HEIGHT;
+	x *= 32;
+	y *= 32;
+	block_width = 32;
+	block_height = 32;
 	block_width += x;
 	block_height += y;
 	y++;
@@ -41,7 +41,7 @@ void	put_block(t_data *data, int x, int y, int color)
 			my_mlx_pixel_put(data, x, y, color);
 			x++;
 		}
-		x = x - (WINDOW_WIDTH / MAP_WIDTH) + 1;
+		x = x - (32) + 1;
 		y++;
 	}
 }
@@ -82,7 +82,7 @@ void	update_player(t_var *data)
 	}
 	data->player.dx = cos(data->player.angle + M_PI / 2) * MOVE_SPEED;
 	data->player.dy = sin(data->player.angle + M_PI / 2) * MOVE_SPEED;
-	if (check_wall(data, data->player.h_move_direction))
+	if (check_wall_h(data, data->player.h_move_direction))
 	{
 		data->player.x += data->player.h_move_direction * data->player.dx;
 		data->player.y += data->player.h_move_direction * data->player.dy;
@@ -123,10 +123,10 @@ int	main(void)
 	};
 	char	**map;
 	char	*relative_paths[5] = {
-		"./textures/test1337.xpm",
-		"./textures/test1337 copy.xpm",
-		"./textures/test1337 copy 2.xpm",
-		"./textures/test1337 copy 3.xpm"
+		"./textures/t_d.xpm",
+		"./textures/test1337.xpm"
+		"./textures/t_l.xpm",
+		"./textures/t_r.xpm",
 	};
 
 	i = 0;
@@ -149,6 +149,8 @@ int	main(void)
 	}
 	map[i] = NULL;
 	data = init_data(map, relative_paths);
+	if (!data)
+		return (0);
 	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
 	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
 	// mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);

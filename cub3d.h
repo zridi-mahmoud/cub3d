@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/01 12:12:06 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/01 23:01:29 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,6 @@ char	get_map_value(t_var *data, t_point point);
 int		key_release(int keycode, t_var *data);
 int		mouse_move(int x, int y, t_var *data);
 int		get_wall_color(t_var *data, t_ray ray, int y, int wall_height);
+int		check_wall_h(t_var *data, int i);
 
 #endif

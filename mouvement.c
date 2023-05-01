@@ -6,37 +6,11 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:40:07 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/30 13:52:53 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/01 22:01:35 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-int	check_wall(t_var *data, int i)
-{
-	float	dx;
-	float	dy;
-
-	dx = cos(data->player.angle) * MOVE_SPEED;
-	dy = sin(data->player.angle) * MOVE_SPEED;
-	if (i == 1)
-	{
-		if (data->map[(int)round(data->player.y + dy - is_facing_up(data->player.angle)) / (WINDOW_HEIGHT
-					/ MAP_HEIGHT)]
-			[(int)round(data->player.x + dx - is_facing_left(data->player.angle)) / (WINDOW_WIDTH / MAP_WIDTH)
-				] == '1')
-			return (0);
-	}
-	else
-	{
-		if (data->map[(int)round(data->player.y - dy - !is_facing_up(data->player.angle))
-				/ (WINDOW_HEIGHT / MAP_HEIGHT)]
-			[(int)round(data->player.x - dx - !is_facing_left(data->player.angle))
-				/ (WINDOW_WIDTH / MAP_WIDTH)] == '1')
-			return (0);
-	}
-	return (1);
-}
 
 void	move_player_h(t_var *data, int i)
 {
@@ -69,17 +43,17 @@ void	move_player_h(t_var *data, int i)
 
 int	key_press(int keycode, t_var *data)
 {
-	if (keycode == 0)
+	if (keycode == 123)
 		data->player.rotation_direction = -1;
-	else if (keycode == 2)
-		data->player.rotation_direction = 1;
-	else if ((keycode == 13 || keycode == 126) && check_wall(data, 1))
-		data->player.v_move_direction = 1;
-	else if ((keycode == 1 || keycode == 125) && check_wall(data, 0))
-		data->player.v_move_direction = -1;
 	else if (keycode == 124)
+		data->player.rotation_direction = 1;
+	else if ((keycode == 13 || keycode == 126))
+		data->player.v_move_direction = 1;
+	else if ((keycode == 1 || keycode == 125))
+		data->player.v_move_direction = -1;
+	else if (keycode == 2)
 		data->player.h_move_direction = 1;
-	else if (keycode == 123)
+	else if (keycode == 0)
 		data->player.h_move_direction = -1;
 	else if (keycode == 53)
 		exit(0);
@@ -91,11 +65,11 @@ int	key_press(int keycode, t_var *data)
 
 int	key_release(int keycode, t_var *data)
 {
-	if (keycode == 0 || keycode == 2)
+	if (keycode == 123 || keycode == 124)
 		data->player.rotation_direction = 0;
 	else if (keycode == 13 || keycode == 1 || keycode == 126 || keycode == 125)
 		data->player.v_move_direction = 0;
-	else if (keycode == 123 || keycode == 124)
+	else if (keycode == 0 || keycode == 2)
 		data->player.h_move_direction = 0;
 	else
 		return (0);

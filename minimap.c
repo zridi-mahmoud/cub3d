@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:35:04 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/26 15:03:45 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 00:01:09 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,7 @@ void	draw_minimap(t_var *data)
 		while (j < MAP_WIDTH)
 		{
 			if (data->map[i][j] == '1')
-				put_block_mini(&data->img, j, i, 0x00000000);
-			else if (data->map[i][j] == '0')
-				put_block_mini(&data->img, j, i, 0x00DDDDDD);
+				put_block_mini(&data->img, j, i, 0x00DD0000);
 			j++;
 		}
 		j = 0;
