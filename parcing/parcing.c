@@ -67,7 +67,6 @@ void fill_map(t_cub3D *cub, t_line *head)
         head->line = ft_strjoin(head->line, "\n");
         // printf("%s", head->line);
         head = head->next;
-
     }
 }
 
@@ -126,7 +125,7 @@ int ft_checkWall(t_cub3D *cub)
     }
     int i = 0;
     i = cub->first_line;
-    while (cub->map_arr[i] )
+    while (cub->map_arr[i])
         i++;
     i--;
     j = 0;
@@ -139,16 +138,42 @@ int ft_checkWall(t_cub3D *cub)
     return 0;
 }
 
+void ft_sortPathTexture(t_cub3D *cub)
+{
+    int i = 0;
+    while (cub->map_arr[i])
+    {
+        if (cub->map_arr[i][0] == '\n')
+        {
+            i++;
+            continue;
+        }
+        else if (cub->map_arr[i][0] == 'N' && cub->map_arr[i][1] == 'O')
+            cub->north_texture = ft_strdup(cub->map_arr[i]);
+        else if (cub->map_arr[i][0] == 'S' && cub->map_arr[i][1] == 'O')
+            cub->south_texture = ft_strdup(cub->map_arr[i]);
+        else if (cub->map_arr[i][0] == 'W' && cub->map_arr[i][1] == 'E')
+            cub->west_texture = ft_strdup(cub->map_arr[i]);
+        else if (cub->map_arr[i][0] == 'E' && cub->map_arr[i][1] == 'A')
+            cub->east_texture = ft_strdup(cub->map_arr[i]);
+        else if (cub->map_arr[i][0] == 'F')
+            cub->floor_color = ft_strdup(cub->map_arr[i]);
+        else if (cub->map_arr[i][0] == 'C')
+            cub->ceilling_color = ft_strdup(cub->map_arr[i]);
+        else if (cub->map_arr[i][0] == '1' || cub->map_arr[i][0] == ' ')
+            break;
+        i++;
+    } 
+}
 
 int ft_checkIfClosed(t_cub3D *cub, t_line *head)
-{
+{ 
     int i = 0;
     int j = 0;
 
-    //skip empty lines
     while (head)
     {
-        if (head->line[0] != '\n')
+        if (head->line[0] != '\n' && head->line[0] != 'N' && head->line[0] != 'S' && head->line[0] != 'W' && head->line[0] != 'E' && head->line[0] != 'R' && head->line[0] != 'F' && head->line[0] != 'C')
         {
             cub->first_line = i;
             break;
@@ -159,19 +184,16 @@ int ft_checkIfClosed(t_cub3D *cub, t_line *head)
     }
 
     i = cub->first_line;
-
     while (cub->map_arr[i])
     {
         j = 0;
-        
-        if(cub->map_arr[i][j] == '0')
-        {
-            printf("Error: map is not closed.\n");
+        if (ft_checkWall(cub))
             return 1;
-        }
+        if(cub->map_arr[i][j] == '0')
+            return 1;
         while (cub->map_arr[i][j])
             j++;
-        if (cub->map_arr[i][j - 2] != '1' || ft_checkWall(cub))
+        if (cub->map_arr[i][j - 2] != '1')
         {
             printf("Error: map is not closed.\n");
             return 1;
@@ -180,7 +202,6 @@ int ft_checkIfClosed(t_cub3D *cub, t_line *head)
     }
     return 0;
 }
-
 
 int is_valid_map( char *filename)
 {
@@ -222,10 +243,9 @@ int is_valid_map( char *filename)
     }
     tmp = head;
     ft_lsttoarray(head, cub);
+    ft_sortPathTexture(cub);
     if (ft_checkIfClosed(cub, tmp))
-    {
         return 0;
-    }
     fill_map(cub, tmp);
     fill_map_back(cub, tmp);
     if (ft_checkForSpaces(cub))
