@@ -112,6 +112,14 @@ typedef struct cub3D_s
     char **map_arr;
     t_line  *head;
     int first_line;
+	char *north_texture;
+    char *south_texture;
+    char *west_texture;
+    char *east_texture;
+    char *floor_color;
+    char *ceilling_color;
+    int map_width;
+    int map_height;
 } t_cub3D;
 
 void	init_player(t_player *player, int i, int j, char dir);
@@ -162,10 +170,7 @@ int		is_valid_map( char *filename);
 size_t	ft_strlcpy(char *dst, char *src, size_t dstsize);
 char	*ft_strcpy(char *dest, const char *src);
 char	*ft_strdup(char *src);
-// static int	ft_count(char *dest);
 char	*ft_strcat(char *dest, char *src);
-// static int	min(size_t a, size_t b);
 char	*ft_substr(char *s, unsigned int start, size_t len);
-// static int	ft_check(char const *set, char c);
 char	*ft_strtrim(char **s1, char *set);
 #endif
