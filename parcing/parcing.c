@@ -34,6 +34,9 @@ void	ft_lsttoarray(t_line *map, t_cub3D *cub)
 		list = list->next;
 	}
 	cub->map_arr[i] = NULL;
+    // width map
+
+	  
 }
 
 char *rightpad(char *str, int n)
@@ -166,6 +169,30 @@ void ft_sortPathTexture(t_cub3D *cub)
     } 
 }
 
+void init_width_height(t_cub3D *cub)
+{
+    int i = cub->first_line;
+    int a = 0;
+    while (cub->map_arr[i])
+    {
+	    a++;
+        i++;
+    }
+    cub->map_height = a;
+
+    i = cub->first_line;
+    int j = 0;
+    while (cub->map_arr[i])
+    {
+        j = 0;
+        while (cub->map_arr[i][j])
+            j++;
+        if (j > cub->map_width)
+            cub->map_width = j;
+        i++;
+    }
+}
+
 int ft_checkIfClosed(t_cub3D *cub, t_line *head)
 { 
     int i = 0;
@@ -182,7 +209,7 @@ int ft_checkIfClosed(t_cub3D *cub, t_line *head)
         i++;
         cub->first_line = i;
     }
-
+    init_width_height(cub);
     i = cub->first_line;
     while (cub->map_arr[i])
     {

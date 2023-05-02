@@ -100,36 +100,6 @@ int	init_textures(t_var *data)
 	return (1);
 }
 
-int map_height(char **map)
-{
-	int i;
-
-	i = 0;
-	while (map[i])
-		i++;
-	return (i);
-}
-
-int map_width(char **map)
-{
-	int i;
-	int j;
-	int max;
-
-	i = 0;
-	max = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-			j++;
-		if (j > max)
-			max = j;
-		i++;
-	}
-	return (max);
-}
-
 t_var	*init_data(t_cub3D *cub)
 {
 	t_var	*data;
@@ -142,11 +112,11 @@ t_var	*init_data(t_cub3D *cub)
 	map = &cub->map_arr[cub->first_line];
 	if (!data)
 		return (NULL);
-	printf("map height: %d max lenght: %d\n", map_height(map), cub->max_lenght);
+	// printf("map height: %d max width: %d\n",cub->map_height, cub->map_width);
 	while (map[++i])
 	{
 		j = 0;
-		printf("|%s|\n", map[i]);
+		// printf("|%s|\n", map[i]);
 		while (map[i][j])
 		{
 			if (map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E'
