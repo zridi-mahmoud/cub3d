@@ -253,10 +253,10 @@ int is_valid_map( char *filename)
         printf("Error: map is not closed.\n");
         return 0;
     }
-    data = init_data(cub->map_arr);
+    data = init_data(cub);
     mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
     mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
-    mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
+    // mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
     mlx_loop_hook(data->mlx, render_next_frame, data);
     mlx_loop(data->mlx);
     return 1;

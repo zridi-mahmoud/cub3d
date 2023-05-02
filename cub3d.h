@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/02 00:21:30 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 00:47:19 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 # define FOV 1.0472
 # define WINDOW_HEIGHT 720
 # define WINDOW_WIDTH 1280
-# define MAP_WIDTH 15
-# define MAP_HEIGHT 10
+# define MAP_WIDTH 26
+# define MAP_HEIGHT 5
 # define MINIMAP_HEIGHT 100
 # define MINIMAP_WIDTH 200
 # define MOVE_SPEED 5
@@ -106,24 +106,24 @@ typedef struct s_line
 
 typedef struct cub3D_s
 {
-    int width;
-    int height;
-    int max_lenght;
-    char **map_arr;
-    t_line  *head;
-    int first_line;
+	int width;
+	int height;
+	int max_lenght;
+	char **map_arr;
+	t_line  *head;
+	int first_line;
 	char *north_texture;
-    char *south_texture;
-    char *west_texture;
-    char *east_texture;
-    char *floor_color;
-    char *ceilling_color;
-    int map_width;
-    int map_height;
+	char *south_texture;
+	char *west_texture;
+	char *east_texture;
+	char *floor_color;
+	char *ceilling_color;
+	int map_width;
+	int map_height;
 } t_cub3D;
 
 void	init_player(t_player *player, int i, int j, char dir);
-t_var	*init_data(char **map, char **paths);
+t_var	*init_data(t_cub3D *cub);
 int		check_wall(t_var *data, int i);
 int		key_press(int keycode, t_var *data);
 int		to_minmap(int x, int y);
@@ -152,8 +152,8 @@ int		check_wall_h(t_var *data, int i);
 
 //parce
 char	*get_next_line(int fd);
-char	*ft_strjoin(char  *s1, char  *s2);
-char	*ft_strtrim(char **s1, char  *set);
+char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strtrim(char **s1, char *set);
 int		ft_strlen(char *s);
 char	*get_line(int fd);
 int		ft_lstsize(t_line *lst);

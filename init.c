@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:50:46 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/01 22:39:34 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 00:59:19 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,9 @@ void	init_player(t_player *player, int i, int j, char dir)
 }
 // t_textures {north, south, east, west, sprite};
 
-int	init_textures(t_var *data, char **paths)
+int	init_textures(t_var *data)
 {
-	data->textures.north.img = mlx_xpm_file_to_image(data->mlx, paths[0],
+	data->textures.north.img = mlx_xpm_file_to_image(data->mlx, "./textures/test1337.xpm",
 			&data->textures.north.width, &data->textures.north.height);
 	if (!data->textures.north.img)
 		return (printf("Error\nInvalid path for north texture"), 1);
@@ -100,26 +100,61 @@ int	init_textures(t_var *data, char **paths)
 	return (1);
 }
 
-t_var	*init_data(char **map, char **paths)
+int map_height(char **map)
+{
+	int i;
+
+	i = 0;
+	while (map[i])
+		i++;
+	return (i);
+}
+
+int map_width(char **map)
+{
+	int i;
+	int j;
+	int max;
+
+	i = 0;
+	max = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+			j++;
+		if (j > max)
+			max = j;
+		i++;
+	}
+	return (max);
+}
+
+t_var	*init_data(t_cub3D *cub)
 {
 	t_var	*data;
 	int		i;
 	int		j;
+	char	**map;
 
 	i = -1;
 	data = malloc(sizeof(t_var));
+	map = &cub->map_arr[cub->first_line];
 	if (!data)
 		return (NULL);
-	while (i < MAP_HEIGHT - 1)
+	printf("map height: %d max lenght: %d\n", map_height(map), cub->max_lenght);
+	while (map[++i])
 	{
-		j = 0 * i++;
-		while (j < MAP_WIDTH)
+		j = 0;
+		printf("|%s|\n", map[i]);
+		while (map[i][j])
 		{
 			if (map[i][j] == 'W' || map[i][j] == 'S' || map[i][j] == 'E'
 					|| map[i][j] == 'N')
 			{
 				map[i][j] = '0';
 				init_player(&data->player, j, i, map[i][j]);
+				printf("player x: %f y: %f\n", data->player.x, data->player.y);
 			}
 			j++;
 		}
@@ -135,7 +170,7 @@ t_var	*init_data(char **map, char **paths)
 	data->img.img = mlx_new_image(data->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	data->img.addr = mlx_get_data_addr(data->img.img, &data->img.bits_per_pixel,
 			&data->img.line_length, &data->img.endian);
-	if (!init_textures(data, paths))
+	if (!init_textures(data))
 		return (NULL);
 	return (data);
 }
