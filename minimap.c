@@ -6,26 +6,27 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:35:04 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/02 00:01:09 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 19:34:03 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	to_minmap(int x, int y)
+int	to_minmap(t_var *data, int x, int y)
 {
 	float	ratiow;
 	float	ratioh;
 
-	ratiow = WINDOW_WIDTH / MINIMAP_WIDTH;
-	ratioh = WINDOW_HEIGHT / MINIMAP_HEIGHT;
+	(void)data;
+	ratiow = 5;
+	ratioh = 5;
 	if (y == 0)
 		return ((int)(x / ratiow));
 	else
-		return ((int)(x / ratioh + WINDOW_HEIGHT - MINIMAP_HEIGHT));
+		return ((int)(x / ratioh));
 }
 
-void	put_miniplayer(t_data *data, t_player *player)
+void	put_miniplayer(t_var *data, t_player *player)
 {
 	int	x;
 	int	y;
@@ -39,8 +40,8 @@ void	put_miniplayer(t_data *data, t_player *player)
 		while (x < offset)
 		{
 			if (x * x + y * y <= offset * offset)
-				my_mlx_pixel_put(data, to_minmap(player->x + x + 3, 0),
-					to_minmap(player->y + y + 3, 1), 0x0000FF00);
+				my_mlx_pixel_put(&data->img, to_minmap(data, player->x + x + 3, 0),
+					to_minmap(data, player->y + y + 3, 1), 0x000000FF);
 			x++;
 		}
 		x = -3;
@@ -55,12 +56,12 @@ void	draw_minimap(t_var *data)
 
 	i = 0;
 	j = 0;
-	while (i < MAP_HEIGHT)
+	while (i < data->map_height)
 	{
-		while (j < MAP_WIDTH)
+		while (j < data->map_widths[i])
 		{
 			if (data->map[i][j] == '1')
-				put_block_mini(&data->img, j, i, 0x00DD0000);
+				put_block_mini(data, j, i, 0x00DD0000);
 			j++;
 		}
 		j = 0;
@@ -68,25 +69,25 @@ void	draw_minimap(t_var *data)
 	}
 }
 
-void	put_block_mini(t_data *data, int x, int y, int color)
+void	put_block_mini(t_var *data, int x, int y, int color)
 {
 	int	block_width;
 	int	block_height;
 
-	x *= WINDOW_WIDTH / MAP_WIDTH;
-	y *= WINDOW_HEIGHT / MAP_HEIGHT;
-	block_width = WINDOW_WIDTH / MAP_WIDTH;
-	block_height = WINDOW_HEIGHT / MAP_HEIGHT;
+	x *= BLOCK_SIZE;
+	y *= BLOCK_SIZE;
+	block_width = BLOCK_SIZE;
+	block_height = BLOCK_SIZE;
 	block_width += x;
 	block_height += y;
 	while (y < block_height - 1)
 	{
 		while (x < block_width - 1)
 		{
-			my_mlx_pixel_put(data, to_minmap(x, 0), to_minmap(y, 1), color);
+			my_mlx_pixel_put(&data->img, to_minmap(data, x, 0), to_minmap(data, y, 1), color);
 			x++;
 		}
-		x = x - (WINDOW_WIDTH / MAP_WIDTH) + 1;
+		x = x - BLOCK_SIZE + 1;
 		y++;
 	}
 }
