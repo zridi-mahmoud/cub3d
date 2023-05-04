@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 03:23:32 by mzridi            #+#    #+#             */
-/*   Updated: 2023/04/30 14:51:41 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 19:23:47 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ char	get_map_value(t_var *data, t_point point)
 	int	x;
 	int	y;
 
-	x = point.x / (WINDOW_WIDTH / MAP_WIDTH);
-	y = point.y / (WINDOW_HEIGHT / MAP_HEIGHT);
-	if (x < 0 || x >= MAP_WIDTH || y < 0 || y >= MAP_HEIGHT)
+	x = point.x / BLOCK_SIZE;
+	y = point.y / BLOCK_SIZE;
+	if (y < 0 || y >= data->map_height || x < 0 || x >= data->map_widths[y])
 		return ('1');
 	else
 		return (data->map[y][x]);
@@ -47,10 +47,10 @@ t_point	first_h_inter(t_var *data, t_ray *ray)
 
 	tan_alpha = fabs(tan(ray->angle));
 	if (ray->angle > 0 && ray->angle < M_PI)
-		point.y = (WINDOW_HEIGHT / MAP_HEIGHT)
-			- fmod(data->player.y, (WINDOW_HEIGHT / MAP_HEIGHT));
+		point.y = BLOCK_SIZE
+			- fmod(data->player.y, BLOCK_SIZE);
 	else
-		point.y = fmod(data->player.y, (WINDOW_HEIGHT / MAP_HEIGHT));
+		point.y = fmod(data->player.y, BLOCK_SIZE);
 	point.x = point.y / tan_alpha;
 	return (point);
 }
@@ -65,7 +65,7 @@ t_point	ith_h_inter(t_var *data, t_ray *ray, int i)
 	if (i == 0)
 		return (add_point_to_player(data, first, ray));
 	tan_alpha = fabs(tan(ray->angle));
-	point.y = (float)WINDOW_HEIGHT / MAP_HEIGHT;
+	point.y = (float)BLOCK_SIZE;
 	point.x = point.y / tan_alpha;
 	point.y = first.y + point.y * i;
 	point.x = first.x + point.x * i;
@@ -79,10 +79,10 @@ t_point	first_v_inter(t_var *data, t_ray *ray)
 
 	tan_alpha = fabs(tan(ray->angle));
 	if (ray->angle > M_PI / 2 && ray->angle < 3 * M_PI / 2)
-		point.x = fmod(data->player.x, (WINDOW_WIDTH / MAP_WIDTH));
+		point.x = fmod(data->player.x, BLOCK_SIZE);
 	else
-		point.x = (WINDOW_WIDTH / MAP_WIDTH)
-			- fmod(data->player.x, (WINDOW_WIDTH / MAP_WIDTH));
+		point.x = BLOCK_SIZE
+			- fmod(data->player.x, BLOCK_SIZE);
 	point.y = point.x * tan_alpha;
 	return (point);
 }
@@ -97,7 +97,7 @@ t_point	ith_v_inter(t_var *data, t_ray *ray, int i)
 	if (i == 0)
 		return (add_point_to_player(data, first, ray));
 	tan_alpha = fabs(tan(ray->angle));
-	point.x = (float)(WINDOW_WIDTH / MAP_WIDTH);
+	point.x = (float)BLOCK_SIZE;
 	point.y = point.x * tan_alpha;
 	point.x = first.x + point.x * i;
 	point.y = first.y + point.y * i;
@@ -113,8 +113,7 @@ t_point	dist_to_h_wall(t_var *data, t_ray *ray)
 	point = ith_h_inter(data, ray, i++);
 	if (is_facing_up(ray->angle))
 		point.y--;
-	while (point.x < WINDOW_WIDTH && point.y < WINDOW_HEIGHT
-		&& get_map_value(data, point) != '1')
+	while (get_map_value(data, point) != '1')
 	{
 		point = ith_h_inter(data, ray, i);
 		if (is_facing_up(ray->angle))
@@ -135,8 +134,7 @@ t_point	dist_to_v_wall(t_var *data, t_ray *ray)
 	point = ith_v_inter(data, ray, i++);
 	if (is_facing_left(ray->angle))
 		point.x--;
-	while (point.x < WINDOW_WIDTH && point.y < WINDOW_HEIGHT
-		&& get_map_value(data, point) != '1')
+	while (get_map_value(data, point) != '1')
 	{
 		point = ith_v_inter(data, ray, i);
 		if (is_facing_left(ray->angle))

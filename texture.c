@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 22:13:38 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/01 23:35:09 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/02 02:12:22 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,31 @@ int	get_position_texture(t_var *data, t_ray ray)
 	texture = get_texture(data, ray);
 	if (ray.type == 'D' || ray.type == 'U')
 	{
-		block_x = fmod(ray.wall.x, (double)WINDOW_WIDTH / MAP_WIDTH);
-		ratio = (double)texture.width / (WINDOW_WIDTH / MAP_WIDTH);
+		block_x = fmod(ray.wall.x, (double)BLOCK_SIZE);
+		ratio = (double)texture.width / BLOCK_SIZE;
 		if (ray.type == 'U')
-			block_x = (double)WINDOW_WIDTH / MAP_WIDTH - block_x;
+			block_x = (double)BLOCK_SIZE - block_x;
 	}
 	else
 	{
-		block_x = fmod(ray.wall.y, (double)WINDOW_HEIGHT / MAP_HEIGHT);
-		ratio = (double)texture.width / ((double)WINDOW_HEIGHT / MAP_HEIGHT);
+		block_x = fmod(ray.wall.y, (double)BLOCK_SIZE);
+		ratio = (double)texture.width / ((double)BLOCK_SIZE);
 		if (ray.type == 'L')
-			block_x = (double)WINDOW_HEIGHT / MAP_HEIGHT - block_x;
+			block_x = (double)BLOCK_SIZE - block_x;
 	}
 	return ((block_x * ratio));
+}
+
+t_point	get_texture_column(t_var *data, t_ray ray, int y, int wall_height)
+{
+	t_point	point;
+	t_texture	texture;
+
+	(void)y;
+	texture = get_texture(data, ray);
+	point.y = (double)texture.height / wall_height;
+	point.x = get_position_texture(data, ray);
+	return (point);
 }
 
 int	get_wall_color(t_var *data, t_ray ray, int y, int wall_height)
