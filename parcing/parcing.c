@@ -452,7 +452,9 @@ int ft_checkColor(char *str)
 {
 	int i = 0;
 	int a = 0;
-	while (str[i] )
+	if (!str)
+		return 1;
+	while (str[i])
 	{
 		if (str[i] == ',')
 		{
@@ -478,6 +480,8 @@ int ft_colorParce(t_cub3D *cub)
 {
 	char **arr = NULL;
 	char **arr2 = NULL;
+	// printf("floor color: %s\n", cub->floor_color);
+	// printf("ceiling color: %s\n", cub->ceiling_color);
 	if (ft_checkColor(cub->floor_color) || ft_checkColor(cub->ceiling_color))
 		return 1;
 	arr = ft_split(cub->floor_color, ',');
@@ -535,7 +539,7 @@ int is_valid_map( char *filename)
 	if (ft_lsttoarray(head, cub))
 		return (0);
 	// ft_sortPathTexture(cub);
-	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp) || ft_colorParce(cub))
+	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp) )
 	{
 		printf("Error: ddewdwedwedwedwedwdwed.\n");
 		return (0);
@@ -548,7 +552,7 @@ int is_valid_map( char *filename)
 	fill_map(cub, tmp);
 	fill_map_back(cub, tmp);
 	ft_lsttoarray(head, cub);
-	if (ft_checkForSpaces(cub) || ft_countPathTexture(cub) || ft_checkForPlayer(cub))
+	if (ft_checkForSpaces(cub) || ft_countPathTexture(cub) || ft_checkForPlayer(cub) || ft_colorParce(cub))
 	{
 		printf("Error: map is not cdlosed.\n");
 		return (0);
@@ -562,9 +566,4 @@ int is_valid_map( char *filename)
 	mlx_loop(data->mlx);
 	return 1;
 }
-
-
-// \n EOF
-
-
 
