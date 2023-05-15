@@ -139,3 +139,129 @@ char	*ft_strtrim(char **s1, char *set)
 	}
 	return (ft_substr((*s1), i, (j + 1) - i));
 }
+
+int	ft_atoi(const char *s1)
+{
+	int	i;
+	int	signe;
+	int	sum;
+	int	v;
+
+	i = 0;
+	v = 0;
+	sum = 0;
+	signe = 1;
+	while (s1[i] == ' ' || (s1[i] >= 9 && s1[i] <= 13))
+		i++;
+	while (s1[i] == '-' || s1[i] == '+' )
+	{
+		if (s1[i] == '-')
+			signe = signe * -1;
+		i++;
+		v++;
+	}
+	if (v > 1)
+		return (0);
+	while (ft_isdigit(s1[i]))
+		sum = sum * 10 + s1[i++] - 48;
+	return (sum * signe);
+}
+
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	return (0);
+}
+
+
+static int	ft_count_split(char *s, char c)
+{
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (s[i])
+	{
+		while (s[i] && c != s[i])
+			i++;
+		if (c == 0)
+		{
+			count++;
+			break ;
+		}
+		while (c && c == s[i])
+			i++;
+		count++;
+	}
+	return (count);
+}
+
+static int	ft_count_word(char *s, char c)
+{
+	int	count;
+
+	count = 0;
+	while (*s && c != *s)
+	{
+		count++;
+		s++;
+	}
+	return (count);
+}
+
+static char	*ft_word(char *s, char c, char **word)
+{
+	int	count;
+	int	i;
+
+	count = ft_count_word(s, c);
+	*word = malloc((count + 1) * sizeof(char));
+	if (!word)
+		return (0);
+	(*word)[count] = 0;
+	i = 0;
+	while (i < count)
+		(*word)[i++] = *s++;
+	while (c == *s)
+		s++;
+	return (s);
+}
+
+static int	_free(char **res, int size)
+{
+	while (size--)
+	{
+		free(res[size]);
+	}
+	free(res);
+	return (0);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	int		i;
+	char	**res;
+	int		count;	
+
+	if (s == 0)
+		return (NULL);
+	i = 0;
+	while (c && *s && c == (char) *s)
+		s++;
+	count = ft_count_split((char *)s, c);
+	res = malloc((count + 1) * sizeof(char *));
+	if (!res)
+		return (0);
+	res[count] = 0;
+	i = 0;
+	while (i < count)
+	{
+		s = ft_word((char *)s, c, res + i);
+		if (!s)
+			_free(res, i);
+		i++;
+	}
+	return (res);
+}
