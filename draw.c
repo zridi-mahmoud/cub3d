@@ -17,7 +17,6 @@ unsigned int	get_color(t_var *data, t_ray *ray, int y, t_point texture_column)
 	t_texture	texture;
 	int 		t_x;
 	int			t_y;
-	
 	t_x = (int)texture_column.x;
 	t_y = (int)(texture_column.y * y);
 	if (t_x >= texture.width)
@@ -28,6 +27,7 @@ unsigned int	get_color(t_var *data, t_ray *ray, int y, t_point texture_column)
 		t_x = 0;
 	if (t_y < 0)
 		t_y = 0;
+	// printf("t_x: %d t_y: %d\n", t_x, data->textures.north.width);
 	texture = get_texture(data, *ray);
 	// printf("texture width: %d height: %d t_x: %d t_y: %d\n", texture.width, texture.height, t_x, t_y);
 	return (texture.data[t_y * texture.width + t_x]);
