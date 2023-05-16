@@ -3,15 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:29:45 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 00:33:31 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 01:57:38 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-#include <string.h>
+
 int	ft_lstsize(t_line *lst)
 {
 	int	len;
@@ -119,9 +119,11 @@ int	ft_checkForSpaces(t_cub3D *cub)
 		j = 0;
 		while (cub->map_arr[i][j])
 		{
-			if(cub->map_arr[i][j] == '0')
+			if (cub->map_arr[i][j] == '0')
 			{
-				if (cub->map_arr[i][j - 1] == ' ' || cub->map_arr[i][j + 1] == ' ' || cub->map_arr[i - 1][j] == ' ' )
+				if (cub->map_arr[i][j - 1] == ' ' ||
+					cub->map_arr[i][j + 1] == ' ' ||
+					cub->map_arr[i - 1][j] == ' ' )
 					return (1);
 				if (!cub->map_arr[i + 1])
 					return (0);
@@ -162,13 +164,42 @@ int	ft_checkWall(t_cub3D *cub)
 	return (0);
 }
 
+int check_No(int i, int j, t_cub3D *cub)
+{
+	if (cub->map_arr[i][j] == 'N' && cub->map_arr[i][j + 1] == 'O')
+		return (1);
+	return (0);
+}
+
+int check_So(int i, int j, t_cub3D *cub)
+{
+	if (cub->map_arr[i][j] == 'S' && cub->map_arr[i][j + 1] == 'O')
+		return (1);
+	return (0);
+}
+
+int check_We(int i, int j, t_cub3D *cub)
+{
+	if (cub->map_arr[i][j] == 'W' && cub->map_arr[i][j + 1] == 'E')
+		return (1);
+	return (0);
+}
+
+int check_Ea(int i, int j, t_cub3D *cub)
+{
+	if (cub->map_arr[i][j] == 'E' && cub->map_arr[i][j + 1] == 'A')
+		return (1);
+	return (0);
+}
+
 int ft_countPathTexture(t_cub3D *cub)
 {
 	int	i;
 	int	j;
-	int	count = 0;
+	int	count;
 
 	i = 0;
+	count = 0;
 	while (cub->map_arr[i])
 	{
 		j = 0;
@@ -178,8 +209,8 @@ int ft_countPathTexture(t_cub3D *cub)
 				j++;
 			else
 			{
-				if ((cub->map_arr[i][j] == 'N' && cub->map_arr[i][j + 1] == 'O') || (cub->map_arr[i][j] == 'S' && cub->map_arr[i][j + 1] == 'O' )|| 
-					(cub->map_arr[i][j] == 'W' && cub->map_arr[i][j + 1] == 'E') || (cub->map_arr[i][j] == 'E' && cub->map_arr[i][j + 1] == 'A')
+				if (check_No(i, j, cub) || check_So(i, j, cub)
+					|| check_We(i, j, cub) || check_Ea(i, j, cub)
 					|| cub->map_arr[i][j] == 'F' || cub->map_arr[i][j] == 'C')
 					count++;
 				j++;
@@ -187,9 +218,27 @@ int ft_countPathTexture(t_cub3D *cub)
 		}
 		i++;
 	}
-	if (count != 6)
-		return (1);
-	return (0);
+	return (count != 6);
+}
+
+void ft_sortWallPath(int i, int j, t_cub3D *cub)
+{
+	if (check_No(i, j, cub))
+		cub->north_texture = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nNO "));
+	else if (check_So(i, j, cub))
+		cub->south_texture = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nSO "));
+	else if (check_We(i, j, cub))
+		cub->west_texture = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nWE "));
+	else if (check_Ea(i, j, cub))
+		cub->east_texture = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nEA "));
+}
+
+void ft_sortColorPath(int i, int j, t_cub3D *cub)
+{
+	if (cub->map_arr[i][j] == 'F')
+		cub->floor_color = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nF "));
+	else if (cub->map_arr[i][j] == 'C')
+		cub->ceiling_color = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nC "));
 }
 
 int	ft_sortPathTexture(t_cub3D *cub)
@@ -207,23 +256,15 @@ int	ft_sortPathTexture(t_cub3D *cub)
 				j++;
 			else
 			{
-				if (cub->map_arr[i][j] == 'N' && cub->map_arr[i][j + 1] == 'O')
-					cub->north_texture = ft_strdup(ft_strtrim( &cub->map_arr[i], "\nNO "));
-				else if (cub->map_arr[i][j] == 'S' && cub->map_arr[i][j + 1] == 'O')
-					cub->south_texture = ft_strdup(ft_strtrim( &cub->map_arr[i], "\nSO "));
-				else if (cub->map_arr[i][j] == 'W' && cub->map_arr[i][j + 1] == 'E')
-					cub->west_texture = ft_strdup(ft_strtrim( &cub->map_arr[i], "\nWE "));
-				else if (cub->map_arr[i][j] == 'E' && cub->map_arr[i][j + 1] == 'A')
-					cub->east_texture = ft_strdup(ft_strtrim( &cub->map_arr[i], "\nEA "));
-				else if (cub->map_arr[i][j] == 'F')
-					cub->floor_color = ft_strdup(ft_strtrim( &cub->map_arr[i], "\nF "));
-				else if (cub->map_arr[i][j] == 'C')
-					cub->ceiling_color = ft_strdup(ft_strtrim( &cub->map_arr[i], "\nC "));
+				if (check_No(i, j, cub) || check_So(i, j, cub) || check_We(i, j, cub) || check_Ea(i, j, cub))
+					ft_sortWallPath(i, j, cub);
+				else if (cub->map_arr[i][j] == 'F' || cub->map_arr[i][j] == 'C')
+					ft_sortColorPath(i, j, cub);
 				else if (cub->map_arr[i][j] == '1' || cub->map_arr[i][j] == '0' || cub->map_arr[i][j] == ' ')
 					break ;
 				else
 					return (1);
-				break;
+				break ;
 			}
 		}
 		i++;
@@ -233,81 +274,82 @@ int	ft_sortPathTexture(t_cub3D *cub)
 
 int init_width_height(t_cub3D *cub)
 {
-    int i = cub->first_line;
-    int a = 0;
-    while (cub->map_arr[i] && cub->map_arr[i][0] != '\n' && cub->map_arr[i][0] != '\0')
-    {
-	    a++;
-        i++;
-    }
-    cub->map_height = a;
-	if (a == 0)
+	int	i;
+	int	a;
+	int	j;
+
+	a = 0;
+	i = cub->first_line;
+	while (cub->map_arr[i] && cub->map_arr[i][0] != '\n')
 	{
-		printf("Error : empty map\n");
-		return (1);
+		a++;
+		i++;
 	}
-    i = cub->first_line;
-    int j = 0;
-    while (cub->map_arr[i])
-    {
-        j = 0;
-        while (cub->map_arr[i][j])
-            j++;
-        if (j > cub->map_width)
-            cub->map_width = j;
-        i++;
-    }
+	cub->map_height = a;
+	if (a == 0)
+		return (1);
+	i = cub->first_line;
+	while (cub->map_arr[i])
+	{
+		j = 0;
+		while (cub->map_arr[i][j])
+			j++;
+		if (j > cub->map_width)
+			cub->map_width = j;
+		i++;
+	}
 	return (0);
 }
 
-int ft_checkIfClosed(t_cub3D *cub, t_line *head)
-{ 
-    int i = 0;
-    int j = 0;
+int	ft_checkIfClosed(t_cub3D *cub, t_line *head)
+{
+	int	i;
+	int	j;
 
-    while (head)
-    {
+	i = 0;
+	while (head)
+	{
 		j = 0;
 		while (head->line[j] && head->line[j] == ' ')
 			j++;
-        if (head->line[j] == '0' || head->line[j] == '1')
-        {
-            cub->first_line = i;
-            break;
-        }
-        head = head->next;
-        i++;
-        cub->first_line = i;
-    }
-	if(init_width_height(cub))
-		return (1);	
-    i = cub->first_line;
-    while (cub->map_arr[i])
-    {
-        j = 0;
-        if (ft_checkWall(cub))
-            return 1;
-        if(cub->map_arr[i][j] == '0')
-            return 1;
-        while (cub->map_arr[i][j])
-            j++;
+		if (head->line[j] == '0' || head->line[j] == '1')
+		{
+			cub->first_line = i;
+			break ;
+		}
+		head = head->next;
+		i++;
+		cub->first_line = i;
+	}
+	if (init_width_height(cub))
+		return (1);
+	i = cub->first_line;
+	while (cub->map_arr[i])
+	{
+		j = 0;
+		if (ft_checkWall(cub))
+			return (1);
+		if (cub->map_arr[i][j] == '0')
+			return (1);
+		while (cub->map_arr[i][j])
+			j++;
 		if (j >= 2)
 		{
 			if (cub->map_arr[i][j - 2] == '0')
-			{
-				printf("Error: map is not closed.\n");
-				return 1;
-			}
+				return (1);
 		}
-        i++;
-    }
-    return 0;
+		i++;
+	}
+	return (0);
 }
 
-void printMap(t_cub3D *cub)
+void	printMap(t_cub3D *cub)
 {
-	int i = 0;
-	int j = 0;
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
 	while (cub->map_arr[i])
 	{
 		j = 0;
@@ -322,14 +364,15 @@ void printMap(t_cub3D *cub)
 
 int ft_checkForMultipleMap(t_cub3D *cub)
 {
-	int i = 0;
-	int j = 0;
-	int a = 0;
-	int map_height = 0;
+	int	i;
+	int	j;
+	int	a;
+	int	map_height;
 
+	a = 0;
 	map_height = cub->map_height;
 	i = cub->first_line;
-	while ( cub->map_arr[i])
+	while (cub->map_arr[i])
 	{
 		j = 0;
 		while (cub->map_arr[i][j])
@@ -337,97 +380,114 @@ int ft_checkForMultipleMap(t_cub3D *cub)
 			if (cub->map_arr[i][j] == '1' || cub->map_arr[i][j] == '0')
 			{
 				a++;
-				break;
+				break ;
 			}
 			j++;
 		}
 		i++;
 	}
 	if (map_height != a)
-	{
-		printf("Error: multiple maps.\n");
-		return 1;
-	}
-	return 0;
+		return (1);
+	return (0);
+}
+
+int ft_findPlayer(char c)
+{
+	if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (1);
+	return (0);
+}
+
+int ft_checkPlayerRow(int i, int j, t_cub3D *cub)
+{
+	if ((cub->map_arr[i - 1][j] != '1' && cub->map_arr[i - 1][j] != '0' ) ||
+		(cub->map_arr[i + 1][j] != '1' && cub->map_arr[i + 1][j] != '0' ))
+		return (1);
+	return (0);
+}
+
+int ft_checkPlayerColumn(int i, int j, t_cub3D *cub)
+{
+	if ((cub->map_arr[i][j - 1] != '1' && cub->map_arr[i][j - 1] != '0' ) ||
+		(cub->map_arr[i][j + 1] != '1' && cub->map_arr[i][j + 1] != '0' ))
+		return (1);
+	return (0);
 }
 
 int ft_check_position(t_cub3D *cub)
 {
-	int i = 0;
-	int j = 0;
+	int	i;
+	int	j;
 
 	i = cub->first_line;
-	while ( cub->map_arr[i])
+	while (cub->map_arr[i])
 	{
 		j = 0;
 		while (cub->map_arr[i][j])
 		{
-			if (cub->map_arr[i][j] == 'N' || cub->map_arr[i][j] == 'S' || cub->map_arr[i][j] == 'E' || cub->map_arr[i][j] == 'W')
+			if (ft_findPlayer(cub->map_arr[i][j]))
 			{
-				if(i == cub->first_line || i == cub->map_height + cub->first_line - 1 || j == 0 || j == cub->map_width)
-				{
-					printf("Error: player is not in the middle of the map.\n");
-					return 1;
-				}
-				printf("i %d ,j %d ,height %d, width %d\n", i, j, cub->map_height , cub->map_width);
-				if ((cub->map_arr[i - 1][j] != '1' && cub->map_arr[i - 1][j] != '0' )|| (cub->map_arr[i + 1][j] != '1' && cub->map_arr[i + 1][j] != '0' ))
-					return 1;
-				if ((cub->map_arr[i][j - 1] != '1' && cub->map_arr[i][j - 1] != '0' )|| (cub->map_arr[i][j + 1] != '1' && cub->map_arr[i][j + 1] != '0' ))
-					return 1;
-
+				if (i == cub->first_line || i == cub->map_height
+					+ cub->first_line - 1 || j == 0 || j == cub->map_width)
+					return (1);
+				if (ft_checkPlayerRow(i, j, cub)
+					|| ft_checkPlayerColumn(i, j, cub))
+					return (1);
 			}
 			j++;
 		}
 		i++;
 	}
-	return 0;
-
+	return (0);
 }
 
 int ft_checkForPlayer(t_cub3D	*cub)
 {
-	int i = 0;
-	int j = 0;
-	int a = 0;
+	int	i;
+	int	j;
+	int	a;
 
+	a = 0;
 	i = cub->first_line;
-	while ( cub->map_arr[i])
+	while (cub->map_arr[i])
 	{
 		j = 0;
 		while (cub->map_arr[i][j])
 		{
-			if (cub->map_arr[i][j] == 'N' || cub->map_arr[i][j] == 'S' || cub->map_arr[i][j] == 'E' || cub->map_arr[i][j] == 'W')
+			if (ft_findPlayer(cub->map_arr[i][j]))
 				a++;
-			else if (cub->map_arr[i][j] != '1' && cub->map_arr[i][j] != '0' && cub->map_arr[i][j] != ' ' && cub->map_arr[i][j] != '\n')
+			else if (cub->map_arr[i][j] != '1' && cub->map_arr[i][j]
+				!= '0' && cub->map_arr[i][j]
+				!= ' ' && cub->map_arr[i][j] != '\n')
 				return (1);
 			j++;
 		}
 		i++;
 	}
 	if (a != 1)
-	{
-		printf("Error: multiple players or no player.\n");
-		return 1;
-	}
+		return (1);
 	return (ft_check_position(cub));
 }
-int convert_floor_color(t_cub3D *cub)
+
+int	convert_floor_color(t_cub3D *cub)
 {
 	cub->floor_color_int = malloc(sizeof(int) * 3);
 	cub->floor_color_int[0] = ft_atoi(cub->floor_color_r);
 	cub->floor_color_int[1] = ft_atoi(cub->floor_color_g);
 	cub->floor_color_int[2] = ft_atoi(cub->floor_color_b);
-	if (cub->floor_color_int[0] > 255 || cub->floor_color_int[1] > 255 || cub->floor_color_int[2] > 255)
+	if (cub->floor_color_int[0] > 255 || cub->floor_color_int[1] > 255
+		|| cub->floor_color_int[2] > 255)
 	{
 		printf("Error: wrong color format.\n");
-		return 1;
+		return (1);
 	}
-	if (cub->floor_color_int[0] < 0 || cub->floor_color_int[1] < 0 || cub->floor_color_int[2] < 0)
+	if (cub->floor_color_int[0] < 0 || cub->floor_color_int[1] < 0
+		|| cub->floor_color_int[2] < 0)
 	{
 		printf("Error: wrong color format.\n");
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
 
 int convert_ceiling_color(t_cub3D *cub)
@@ -436,24 +496,30 @@ int convert_ceiling_color(t_cub3D *cub)
 	cub->ceiling_color_int[0] = ft_atoi(cub->ceiling_color_r);
 	cub->ceiling_color_int[1] = ft_atoi(cub->ceiling_color_g);
 	cub->ceiling_color_int[2] = ft_atoi(cub->ceiling_color_b);
-	if (cub->ceiling_color_int[0] > 255 || cub->ceiling_color_int[1] > 255 || cub->ceiling_color_int[2] > 255)
+	if (cub->ceiling_color_int[0] > 255 || cub->ceiling_color_int[1] > 255
+		|| cub->ceiling_color_int[2] > 255)
 	{
 		printf("Error: wrong color format.\n");
-		return 1;
+		return (1);
 	}
-	if (cub->ceiling_color_int[0] < 0 || cub->ceiling_color_int[1] < 0 || cub->ceiling_color_int[2] < 0)
+	if (cub->ceiling_color_int[0] < 0 || cub->ceiling_color_int[1] < 0
+		|| cub->ceiling_color_int[2] < 0)
 	{
 		printf("Error: wrong color format.\n");
-		return 1;
+		return (1);
 	}
-	return 0;
+	return (0);
 }
+
 int ft_checkColor(char *str)
 {
-	int i = 0;
-	int a = 0;
+	int	i;
+	int	a;
+
+	a = 0;
+	i = 0;
 	if (!str)
-		return 1;
+		return (1);
 	while (str[i])
 	{
 		if (str[i] == ',')
@@ -464,26 +530,22 @@ int ft_checkColor(char *str)
 		if (!ft_isdigit(str[i]))
 		{
 			printf("Error: wrong color format.\n");
-			return 1;
+			return (1);
 		}
 		i++;
 	}
 	if (a != 2)
-	{
-		printf("Error: wrong color format.\n");
-		return 1;
-	}
-	return 0;
+		return (1);
+	return (0);
 }
 
-int ft_colorParce(t_cub3D *cub)
+int	ft_colorParce(t_cub3D *cub)
 {
-	char **arr = NULL;
-	char **arr2 = NULL;
-	// printf("floor color: %s\n", cub->floor_color);
-	// printf("ceiling color: %s\n", cub->ceiling_color);
+	char	**arr;
+	char	**arr2;
+
 	if (ft_checkColor(cub->floor_color) || ft_checkColor(cub->ceiling_color))
-		return 1;
+		return (1);
 	arr = ft_split(cub->floor_color, ',');
 	arr2 = ft_split(cub->ceiling_color, ',');
 	cub->floor_color_r = arr[0];
@@ -493,8 +555,8 @@ int ft_colorParce(t_cub3D *cub)
 	cub->ceiling_color_g = arr2[1];
 	cub->ceiling_color_b = arr2[2];
 	if (convert_floor_color(cub) || convert_ceiling_color(cub))
-		return 1;
-	return 0;
+		return (1);
+	return (0);
 }
 
 // int	exit_game(t_var *data)
@@ -511,12 +573,15 @@ int ft_colorParce(t_cub3D *cub)
 
 int is_valid_map( char *filename)
 {
-	t_var *data = malloc(sizeof(t_var));
-	t_cub3D *cub = malloc(sizeof(t_cub3D));
-	t_line *head = NULL;
-	t_line *current = NULL;
-	char *line = NULL;
-	int fd = open(filename, O_RDONLY);
+	t_var	*data;
+	t_cub3D	*cub;
+	t_line	*head;
+	t_line	*current;
+	char	*line;
+	int		fd = open(filename, O_RDONLY);
+
+	data = malloc(sizeof(t_var));
+	cub = malloc(sizeof(t_cub3D));
 	if (fd == -1)
 	{
 		printf("Error: could not open file.\n");
@@ -525,13 +590,16 @@ int is_valid_map( char *filename)
 	while ((line = get_next_line(fd)))
 	{
 		t_line *new_node = (t_line *)malloc(sizeof(t_line));
-		new_node->line = (char *)malloc(ft_strlen(line) + 1); // +1 for null terminator
+		new_node->line = (char *)malloc(ft_strlen(line) + 1);
 		new_node->line = ft_strdup(line);
 		new_node->next = NULL;
-		if (head == NULL) {
+		if (head == NULL)
+		{
 			head = new_node;
 			current = new_node;
-		} else {
+		}
+		else 
+		{
 			current->next = new_node;
 			current = new_node;
 		}
@@ -550,7 +618,6 @@ int is_valid_map( char *filename)
 	tmp = head;
 	if (ft_lsttoarray(head, cub))
 		return (0);
-	// ft_sortPathTexture(cub);
 	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp) )
 	{
 		printf("Error: ddewdwedwedwedwedwdwed.\n");
@@ -576,6 +643,5 @@ int is_valid_map( char *filename)
 	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
 	mlx_loop(data->mlx);
-	return 1;
+	return (1);
 }
-
