@@ -6,7 +6,7 @@
 /*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 16:19:26 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 23:04:57 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,16 +164,16 @@ char		*ft_strjoin(char *s1, char *s2);
 char		*ft_strtrim(char **s1, char *set);
 int			ft_strlen(char *s);
 char		*get_line(int fd);
+int			ft_checkline(char *line);
+void		fill_map_back(t_cub3D *cub, t_line *head);
 int			ft_lstsize(t_line *lst);
 int			ft_lsttoarray(t_line *map, t_cub3D *cub);
 char		*rightpad(char *str, int n);
 void		leftpad(char *str);
 void		fill_map(t_cub3D *cub, t_line *head);
-int			ft_checkLine(char *line);
-void		fill_map_back(t_cub3D *cub, t_line *head);
-int			ft_checkForSpaces(t_cub3D *cub);
-int			ft_checkWall(t_cub3D *cub);
-int			ft_checkIfClosed(t_cub3D *cub, t_line *head);
+int			ft_checkforspaces(t_cub3D *cub);
+int			ft_checkwall(t_cub3D *cub);
+int			ft_checkifclosed(t_cub3D *cub, t_line *head);
 int			is_valid_map( char *filename);
 size_t		ft_strlcpy(char *dst, char *src, size_t dstsize);
 char		*ft_strcpy(char *dest, const char *src);
@@ -190,9 +190,39 @@ char		get_map_value(t_var *data, t_point point);
 t_point		first_h_inter(t_var *data, t_ray *ray);
 t_point		ith_h_inter(t_var *data, t_ray *ray, int i);
 t_point		first_v_inter(t_var *data, t_ray *ray);
-// static int	_free(char **res, int size);
-// static char	*ft_word(char *s, char c, char **word);
-// static int	ft_count_word(char *s, char c);
-// static int	ft_count_split(char *s, char c);
-
+int			ft_lstsize(t_line *lst);
+int			ft_lsttoarray(t_line *map, t_cub3D *cub);
+char		*rightpad(char *str, int n);
+void		leftpad(char *str);
+void		fill_map(t_cub3D *cub, t_line *head);
+int			is_valid_map( char *filename);
+int			filling(t_cub3D *cub, t_line *tmp);
+t_line		*read_map(t_cub3D *cub);
+void		hooks(t_var *data);
+void		check_forma(t_cub3D *cub, t_line *tmp);
+void		check_file(char *filename, t_cub3D *cub);
+int			ft_colorparce(t_cub3D *cub);
+int			ft_checkcolor(char *str);
+int			convert_ceiling_color(t_cub3D *cub);
+int			convert_floor_color(t_cub3D *cub);
+int			ft_checkforplayer(t_cub3D	*cub);
+int			ft_check_position(t_cub3D *cub);
+int			ft_checkplayercolumn(int i, int j, t_cub3D *cub);
+int			ft_checkplayerrow(int i, int j, t_cub3D *cub);
+int			ft_findplayer(char c);
+int			ft_checkformultiplemap(t_cub3D *cub);
+int			ft_checkifclosed(t_cub3D *cub, t_line *head);
+int			check_utils(t_cub3D *cub, int i, int j);
+int			init_width_height(t_cub3D *cub);
+int			ft_sortpathtexture(t_cub3D *cub);
+int			check_direction(int i, int j, t_cub3D *cub);
+void		ft_sortcolorpath(int i, int j, t_cub3D *cub);
+void		ft_sortwallpath(int i, int j, t_cub3D *cub);
+int			ft_countpathtexture(t_cub3D *cub);
+int			check_ea(int i, int j, t_cub3D *cub);
+int			check_we(int i, int j, t_cub3D *cub);
+int			check_so(int i, int j, t_cub3D *cub);
+int			check_no(int i, int j, t_cub3D *cub);
+int			ft_checkwall(t_cub3D *cub);
+int			ft_checkforspaces(t_cub3D *cub);
 #endif

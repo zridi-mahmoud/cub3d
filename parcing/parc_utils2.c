@@ -6,7 +6,7 @@
 /*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 01:20:49 by rel-maza          #+#    #+#             */
-/*   Updated: 2023/05/16 01:20:57 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 23:31:47 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	*ft_strcpy(char *dest, const char *src)
 	int	i;
 
 	i = 0;
-	while (src[i] != '\0')
+	while (src[i] && src[i] != '\0')
 	{
 		dest[i] = src[i];
 		i++;
