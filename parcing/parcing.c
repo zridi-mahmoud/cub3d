@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:29:45 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:57:38 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 02:42:31 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -642,6 +642,7 @@ int is_valid_map( char *filename)
 	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
 	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
 	mlx_loop_hook(data->mlx, render_next_frame, data);
+	mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
 	mlx_loop(data->mlx);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:40:07 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:34:00 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 02:40:54 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,16 @@ int	key_release(int keycode, t_var *data)
 
 int	mouse_move(int x, int y, t_var *data)
 {
-	mlx_mouse_hide(data->mlx_win);
 	mlx_mouse_get_pos(data->mlx_win, &x, &y);
-	mlx_mouse_move(data->mlx_win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 	(void)y;
-	if (x < WINDOW_WIDTH * 0.49)
+	if (x + 1 < data->player.mouse_x)
 		data->player.rotation_direction = -1;
-	else if (x > 0.51 * (WINDOW_WIDTH))
+	else if (x - 1 > data->player.mouse_x)
 		data->player.rotation_direction = 1;
 	else
 		data->player.rotation_direction = 0;
-	data->player.mouse_x = x;
+	mlx_mouse_move(data->mlx_win, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	data->player.mouse_x = WINDOW_WIDTH / 2;
+	mlx_mouse_hide(data->mlx_win);
 	return (0);
 }
