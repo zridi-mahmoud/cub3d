@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:29:45 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 02:42:31 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 12:34:26 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,11 @@ char	*rightpad(char *str, int n)
 
 	ptr = malloc(n + 1);
 	ft_strcpy(ptr, str);
-	i = ft_strlen(str) - 1;
+	i = ft_strlen(str) - 1 ;
 	while (i < n)
 		ptr[i++] = ' ';
-	ptr[n] = '\n';
-	ptr[n - 1] = '\0';
+	ptr[n - 1] = '\n';
+	ptr[n] = '\0';
 	return (ptr);
 }
 
@@ -81,8 +81,8 @@ void	fill_map(t_cub3D *cub, t_line *head)
 {
 	while (head)
 	{
-		head->line = rightpad(head->line, cub->max_lenght);
 		head->line = ft_strjoin(head->line, "\n");
+		head->line = rightpad(head->line, cub->max_lenght);
 		head = head->next;
 	}
 }
@@ -343,25 +343,6 @@ int	ft_checkIfClosed(t_cub3D *cub, t_line *head)
 	return (0);
 }
 
-void	printMap(t_cub3D *cub)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (cub->map_arr[i])
-	{
-		j = 0;
-		while (cub->map_arr[i][j])
-		{
-			printf("%c", cub->map_arr[i][j]);
-			j++;
-		}
-		i++;
-	}
-}
-
 int ft_checkForMultipleMap(t_cub3D *cub)
 {
 	int	i;
@@ -559,17 +540,24 @@ int	ft_colorParce(t_cub3D *cub)
 	return (0);
 }
 
-// int	exit_game(t_var *data)
-// {
-// 	if (data)
-// 	{
-// 		if (data->map_widths)
-// 			free(data->map_widths);
-// 		if (data->map)
-// 			free(data->map);
-// 	}
-// 	exit(0);
-// }
+void	ft_print_map(t_cub3D *cub)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (cub->map_arr[i])
+	{
+		j = 0;
+		while (cub->map_arr[i][j])
+		{
+			printf("%c", cub->map_arr[i][j]);
+			j++;
+		}
+		// printf("\n");
+		i++;
+	}
+}
 
 int is_valid_map( char *filename)
 {
@@ -585,12 +573,12 @@ int is_valid_map( char *filename)
 	if (fd == -1)
 	{
 		printf("Error: could not open file.\n");
-		return 0;
+		return (0);
 	}
 	while ((line = get_next_line(fd)))
 	{
+		printf("line = %s", line);
 		t_line *new_node = (t_line *)malloc(sizeof(t_line));
-		new_node->line = (char *)malloc(ft_strlen(line) + 1);
 		new_node->line = ft_strdup(line);
 		new_node->next = NULL;
 		if (head == NULL)
@@ -598,14 +586,13 @@ int is_valid_map( char *filename)
 			head = new_node;
 			current = new_node;
 		}
-		else 
+		else
 		{
 			current->next = new_node;
 			current = new_node;
 		}
 		free(line);
 	}
-	
 	close(fd);
 	t_line *tmp = head;
 	cub->max_lenght = 0;
@@ -616,9 +603,12 @@ int is_valid_map( char *filename)
 		tmp = tmp->next;
 	}
 	tmp = head;
+	fill_map(cub, tmp);
+	fill_map_back(cub, tmp);
 	if (ft_lsttoarray(head, cub))
 		return (0);
-	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp) )
+	ft_print_map(cub);
+	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp))
 	{
 		printf("Error: ddewdwedwedwedwedwdwed.\n");
 		return (0);
@@ -628,14 +618,14 @@ int is_valid_map( char *filename)
 		printf("Error: multiple maps.\n");
 		return (0);
 	}
-	fill_map(cub, tmp);
-	fill_map_back(cub, tmp);
-	ft_lsttoarray(head, cub);
+	// if (ft_lsttoarray(head, cub))
+	// 	return (0);
 	if (ft_checkForSpaces(cub) || ft_countPathTexture(cub) || ft_checkForPlayer(cub) || ft_colorParce(cub))
 	{
 		printf("Error: map is not cdlosed.\n");
 		return (0);
 	}
+	ft_print_map(cub);
 	data = init_data(cub);
 	if (data == NULL)
 		return (1);
