@@ -6,11 +6,11 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:35:04 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:05:30 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/17 00:14:39 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 int	to_minmap(t_var *data, int x, int y)
 {

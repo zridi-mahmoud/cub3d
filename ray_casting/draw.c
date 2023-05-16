@@ -6,11 +6,11 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 22:49:15 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:05:02 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/17 00:14:39 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 unsigned int	get_color(t_var *data, t_ray *ray, int y,
 		t_point texture_column)

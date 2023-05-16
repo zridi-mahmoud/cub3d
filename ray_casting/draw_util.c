@@ -6,11 +6,11 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 01:43:21 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:45:31 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/17 00:14:39 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {

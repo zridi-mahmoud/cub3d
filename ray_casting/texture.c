@@ -6,11 +6,11 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 22:13:38 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:34:44 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/17 00:14:39 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 t_texture	get_texture(t_var *data, t_ray ray)
 {

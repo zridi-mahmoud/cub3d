@@ -6,11 +6,11 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 21:59:03 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:27:23 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/17 00:14:39 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 int	check_edge(t_var *data, float dy, float dx)
 {

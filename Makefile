@@ -3,8 +3,9 @@ BONUS_NAME = cub3d_bonus
 CC = gcc
 MLX= mlx/libmlx.a
 
-SRC = main.c init.c draw.c mouvement.c minimap.c rays.c distances.c parcing/get_line.c parcing/pars_utils.c parcing/parcing.c texture.c check_wall.c \
-		parcing/parc_utils2.c parcing/parc_utils3.c parcing/parc_utils4.c  init_helper.c distances_util.c draw_util.c \
+SRC = main.c ray_casting/init.c ray_casting/draw.c ray_casting/mouvement.c ray_casting/minimap.c ray_casting/rays.c ray_casting/distances.c \
+		parcing/get_line.c parcing/pars_utils.c parcing/parcing.c ray_casting/texture.c ray_casting/check_wall.c \
+		parcing/parc_utils2.c parcing/parc_utils3.c parcing/parc_utils4.c  ray_casting/init_helper.c ray_casting/distances_util.c ray_casting/draw_util.c \
 		parcing/fill_map.c parcing/lst_array.c parcing/sort_path.c parcing/parc_color.c parcing/player.c \
 		parcing/check_map.c parcing/valid_map.c 
 

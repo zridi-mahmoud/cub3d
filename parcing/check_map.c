@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 23:05:43 by rel-maza          #+#    #+#             */
-/*   Updated: 2023/05/16 23:19:13 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/17 00:05:32 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,8 @@ int	is_valid_map( char *filename)
 	if (!filling(cub, tmp))
 		return (0);
 	data = init_data(cub);
-	if (data == NULL)
-		return (1);
+	if (!data)
+		exit(1);
 	hooks(data);
 	return (1);
 }
