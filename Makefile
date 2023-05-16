@@ -3,7 +3,7 @@ BONUS_NAME = cub3d_bonus
 CC = gcc
 
 SRC = main.c init.c draw.c mouvement.c minimap.c rays.c distances.c parcing/get_line.c parcing/pars_utils.c parcing/parcing.c texture.c check_wall.c \
-		parcing/parc_utils2.c parcing/parc_utils3.c parcing/parc_utils4.c
+		parcing/parc_utils2.c parcing/parc_utils3.c parcing/parc_utils4.c  init_helper.c distances_util.c draw_util.c
 
 BONUS_SRC = 
 

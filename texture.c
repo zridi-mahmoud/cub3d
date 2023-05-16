@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 22:13:38 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/02 02:12:22 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 01:34:44 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	get_position_texture(t_var *data, t_ray ray)
 
 t_point	get_texture_column(t_var *data, t_ray ray, int y, int wall_height)
 {
-	t_point	point;
+	t_point		point;
 	t_texture	texture;
 
 	(void)y;
@@ -83,7 +83,5 @@ int	get_wall_color(t_var *data, t_ray ray, int y, int wall_height)
 		xx = texture.width - 1;
 	else if (xx < 0)
 		xx = 0;
-	// printf("xx = %d, yy = %d texture width = %d texture height = %d\n", xx, yy, texture.width, texture.height);
-	// printf("raytype = %c\n", ray.type);
 	return (texture.data[yy * texture.width + xx]);
 }

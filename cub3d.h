@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:39:36 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 01:54:18 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,6 @@
 # define MINIMAP_WIDTH 200
 # define MOVE_SPEED 5
 # define ROTATION_SPEED 0.1
-# define SKY_COLOR 0x00BFFF
-# define GROUND_COLOR 0x8B4513
-# define WALL_COLOR_D 0x0000FF
-# define WALL_COLOR_U 0xFF0000
-# define WALL_COLOR_L 0x00FF00
-# define WALL_COLOR_R 0xFFFF00
 # define BLOCK_SIZE 32
 
 typedef struct s_data {
@@ -188,4 +182,16 @@ int			ft_isdigit(int c);
 char		*ft_strcat(char *dest, char *src);
 char		*ft_substr(char *s, unsigned int start, size_t len);
 char		**ft_split(char const *s, char c);
+int			map_height(char **map);
+int			init_textures(t_var *data);
+t_point		add_point_to_player(t_var *data, t_point point, t_ray *ray);
+char		get_map_value(t_var *data, t_point point);
+t_point		first_h_inter(t_var *data, t_ray *ray);
+t_point		ith_h_inter(t_var *data, t_ray *ray, int i);
+t_point		first_v_inter(t_var *data, t_ray *ray);
+// static int	_free(char **res, int size);
+// static char	*ft_word(char *s, char c, char **word);
+// static int	ft_count_word(char *s, char c);
+// static int	ft_count_split(char *s, char c);
+
 #endif

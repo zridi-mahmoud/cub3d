@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:29:45 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/02 23:34:05 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 00:33:31 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,6 +496,18 @@ int ft_colorParce(t_cub3D *cub)
 		return 1;
 	return 0;
 }
+
+// int	exit_game(t_var *data)
+// {
+// 	if (data)
+// 	{
+// 		if (data->map_widths)
+// 			free(data->map_widths);
+// 		if (data->map)
+// 			free(data->map);
+// 	}
+// 	exit(0);
+// }
 
 int is_valid_map( char *filename)
 {

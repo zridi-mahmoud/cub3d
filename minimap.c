@@ -6,7 +6,7 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:35:04 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/02 19:34:03 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 01:05:30 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ void	put_miniplayer(t_var *data, t_player *player)
 		while (x < offset)
 		{
 			if (x * x + y * y <= offset * offset)
-				my_mlx_pixel_put(&data->img, to_minmap(data, player->x + x + 3, 0),
+				my_mlx_pixel_put(&data->img,
+					to_minmap(data, player->x + x + 3, 0),
 					to_minmap(data, player->y + y + 3, 1), 0x000000FF);
 			x++;
 		}
@@ -84,7 +85,8 @@ void	put_block_mini(t_var *data, int x, int y, int color)
 	{
 		while (x < block_width - 1)
 		{
-			my_mlx_pixel_put(&data->img, to_minmap(data, x, 0), to_minmap(data, y, 1), color);
+			my_mlx_pixel_put(&data->img, to_minmap(data, x, 0),
+				to_minmap(data, y, 1), color);
 			x++;
 		}
 		x = x - BLOCK_SIZE + 1;

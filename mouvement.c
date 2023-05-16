@@ -6,11 +6,21 @@
 /*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 02:40:07 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/01 22:01:35 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 01:34:00 by mzridi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	exit_game(t_var *data)
+{
+	mlx_destroy_window(data->mlx, data->mlx_win);
+	if (data->map_widths)
+		free(data->map_widths);
+	if (data)
+		free(data);
+	exit(0);
+}
 
 void	move_player_h(t_var *data, int i)
 {
@@ -56,10 +66,9 @@ int	key_press(int keycode, t_var *data)
 	else if (keycode == 0)
 		data->player.h_move_direction = -1;
 	else if (keycode == 53)
-		exit(0);
+		exit_game(data);
 	else
 		return (0);
-	render_next_frame(data);
 	return (0);
 }
 
