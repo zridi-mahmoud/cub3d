@@ -1,6 +1,7 @@
 NAME = cub3d
 BONUS_NAME = cub3d_bonus
 CC = gcc
+MLX= mlx/libmlx.a
 
 SRC = main.c init.c draw.c mouvement.c minimap.c rays.c distances.c parcing/get_line.c parcing/pars_utils.c parcing/parcing.c texture.c check_wall.c \
 		parcing/parc_utils2.c parcing/parc_utils3.c parcing/parc_utils4.c  init_helper.c distances_util.c draw_util.c
@@ -21,16 +22,22 @@ bonus: $(BONUS_OBJ)
 
 %.o: %.c 
 
-$(NAME): $(OBJ)
+$(MLX):
+	make -C mlx/
+
+$(NAME): $(MLX) $(OBJ)
 	$(CC) $(OBJ) mlx/libmlx.a -g -fsanitize=address -Lmlx -lmlx -Ofast -framework OpenGL -framework AppKit -o $(NAME)
 
 %.o: %.c cub3d.h
 	$(CC) $(FLAGS)  -Imlx -c $< -o $@
 
-clean:
+clean_mlx:
+	make clean -C mlx/ 
+
+clean: clean_mlx
 	rm -f $(OBJ) $(BONUS_OBJ)
 
-fclean : clean
-	@rm -rf $(NAME) $(BONUS_NAME)
+fclean : clean clean_mlx
+	@rm -rf $(NAME) $(BONUS_NAME) 
 
 re : fclean all
