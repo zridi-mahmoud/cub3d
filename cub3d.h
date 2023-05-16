@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 01:54:18 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 16:19:26 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct cub3D_s
 	int		*ceiling_color_int;
 	int		map_width;
 	int		map_height;
+	int		fd;
 }	t_cub3D;
 
 typedef struct s_var {

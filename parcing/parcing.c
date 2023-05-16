@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parcing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:29:45 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 12:34:26 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:40:51 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,13 +241,28 @@ void ft_sortColorPath(int i, int j, t_cub3D *cub)
 		cub->ceiling_color = ft_strdup(ft_strtrim(&cub->map_arr[i], "\nC "));
 }
 
+int check_direction(int i, int j, t_cub3D *cub)
+{
+	if (check_No(i, j, cub) || check_So(i, j, cub) || check_We(i, j, cub) || check_Ea(i, j, cub))
+	{
+		ft_sortWallPath(i, j, cub);
+		return (1);
+	}
+	else if (cub->map_arr[i][j] == 'F' || cub->map_arr[i][j] == 'C')
+	{
+		ft_sortColorPath(i, j, cub);
+		return (1);
+	}
+	return (0);
+}
+
 int	ft_sortPathTexture(t_cub3D *cub)
 {
 	int	i;
 	int	j;
 
-	i = 0;
-	while (cub->map_arr[i])
+	i = -1;
+	while (cub->map_arr[++i])
 	{
 		j = 0;
 		while (cub->map_arr[i][j] != '\n')
@@ -256,18 +271,16 @@ int	ft_sortPathTexture(t_cub3D *cub)
 				j++;
 			else
 			{
-				if (check_No(i, j, cub) || check_So(i, j, cub) || check_We(i, j, cub) || check_Ea(i, j, cub))
-					ft_sortWallPath(i, j, cub);
-				else if (cub->map_arr[i][j] == 'F' || cub->map_arr[i][j] == 'C')
-					ft_sortColorPath(i, j, cub);
-				else if (cub->map_arr[i][j] == '1' || cub->map_arr[i][j] == '0' || cub->map_arr[i][j] == ' ')
+				if (check_direction(i, j, cub))
+					break ;
+				else if (cub->map_arr[i][j] == '1' || \
+					cub->map_arr[i][j] == '0' || cub->map_arr[i][j] == ' ')
 					break ;
 				else
 					return (1);
 				break ;
 			}
 		}
-		i++;
 	}
 	return (0);
 }
@@ -301,6 +314,27 @@ int init_width_height(t_cub3D *cub)
 	return (0);
 }
 
+int	check_utils(t_cub3D *cub, int i, int j)
+{
+	while (cub->map_arr[i])
+	{
+		j = 0;
+		if (ft_checkWall(cub))
+			return (1);
+		if (cub->map_arr[i][j] == '0')
+			return (1);
+		while (cub->map_arr[i][j])
+			j++;
+		if (j >= 2)
+		{
+			if (cub->map_arr[i][j - 2] == '0')
+				return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	ft_checkIfClosed(t_cub3D *cub, t_line *head)
 {
 	int	i;
@@ -324,22 +358,8 @@ int	ft_checkIfClosed(t_cub3D *cub, t_line *head)
 	if (init_width_height(cub))
 		return (1);
 	i = cub->first_line;
-	while (cub->map_arr[i])
-	{
-		j = 0;
-		if (ft_checkWall(cub))
-			return (1);
-		if (cub->map_arr[i][j] == '0')
-			return (1);
-		while (cub->map_arr[i][j])
-			j++;
-		if (j >= 2)
-		{
-			if (cub->map_arr[i][j - 2] == '0')
-				return (1);
-		}
-		i++;
-	}
+	if (check_utils(cub, i, j))
+		return (1);
 	return (0);
 }
 
@@ -554,31 +574,58 @@ void	ft_print_map(t_cub3D *cub)
 			printf("%c", cub->map_arr[i][j]);
 			j++;
 		}
-		// printf("\n");
 		i++;
 	}
 }
 
-int is_valid_map( char *filename)
+void	check_file(char *filename, t_cub3D *cub)
 {
-	t_var	*data;
-	t_cub3D	*cub;
-	t_line	*head;
-	t_line	*current;
-	char	*line;
-	int		fd = open(filename, O_RDONLY);
-
-	data = malloc(sizeof(t_var));
-	cub = malloc(sizeof(t_cub3D));
-	if (fd == -1)
+	cub->fd = open(filename, O_RDONLY);
+	if (cub->fd == -1)
 	{
 		printf("Error: could not open file.\n");
-		return (0);
+		exit(1);
 	}
-	while ((line = get_next_line(fd)))
+}
+
+void	check_forma(t_cub3D *cub, t_line *tmp)
+{
+	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp))
 	{
-		printf("line = %s", line);
-		t_line *new_node = (t_line *)malloc(sizeof(t_line));
+		printf("Error: ddewdwedwedwedwedwdwed.\n");
+		exit(0);
+	}
+	if (ft_checkForMultipleMap(cub))
+	{
+		printf("Error: multiple maps.\n");
+		exit(0);
+	}
+	if (ft_checkForSpaces(cub) || ft_countPathTexture(cub) || \
+		ft_checkForPlayer(cub) || ft_colorParce(cub))
+	{
+		printf("Error: map is not cdlosed.\n");
+		exit(0);
+	}
+}
+
+void hooks(t_var *data)
+{
+	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
+	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
+	mlx_loop_hook(data->mlx, render_next_frame, data);
+	mlx_loop(data->mlx);
+}
+
+t_line 	*read_map(t_cub3D *cub)
+{
+	t_line	*new_node;
+	t_line	*current;
+	t_line 	*head = NULL;
+	char	*line;
+
+	while ((line = get_next_line(cub->fd)))
+	{
+		new_node = (t_line *)malloc(sizeof(t_line));
 		new_node->line = ft_strdup(line);
 		new_node->next = NULL;
 		if (head == NULL)
@@ -593,8 +640,32 @@ int is_valid_map( char *filename)
 		}
 		free(line);
 	}
-	close(fd);
-	t_line *tmp = head;
+	close(cub->fd);
+	return (head);
+}
+
+int filling(t_cub3D *cub, t_line *tmp)
+{
+	fill_map(cub, tmp);
+	fill_map_back(cub, tmp);
+	if (ft_lsttoarray(tmp, cub))
+		return (0);
+	check_forma(cub, tmp);
+	return (1);
+}
+
+int  is_valid_map( char *filename)
+{
+	t_var	*data;
+	t_cub3D	*cub;
+	t_line	*head;
+	t_line	*tmp;
+
+	data = malloc(sizeof(t_var));
+	cub = malloc(sizeof(t_cub3D));
+	check_file(filename, cub);
+	head = read_map(cub);
+	tmp = head;
 	cub->max_lenght = 0;
 	while (tmp)
 	{
@@ -603,36 +674,11 @@ int is_valid_map( char *filename)
 		tmp = tmp->next;
 	}
 	tmp = head;
-	fill_map(cub, tmp);
-	fill_map_back(cub, tmp);
-	if (ft_lsttoarray(head, cub))
+	if (!filling(cub, tmp))
 		return (0);
-	ft_print_map(cub);
-	if (ft_sortPathTexture(cub) || ft_checkIfClosed(cub, tmp))
-	{
-		printf("Error: ddewdwedwedwedwedwdwed.\n");
-		return (0);
-	}
-	if (ft_checkForMultipleMap(cub))
-	{
-		printf("Error: multiple maps.\n");
-		return (0);
-	}
-	// if (ft_lsttoarray(head, cub))
-	// 	return (0);
-	if (ft_checkForSpaces(cub) || ft_countPathTexture(cub) || ft_checkForPlayer(cub) || ft_colorParce(cub))
-	{
-		printf("Error: map is not cdlosed.\n");
-		return (0);
-	}
-	ft_print_map(cub);
 	data = init_data(cub);
 	if (data == NULL)
 		return (1);
-	mlx_hook(data->mlx_win, 2, 1L << 0, &key_press, data);
-	mlx_hook(data->mlx_win, 3, 1L << 1, &key_release, data);
-	mlx_loop_hook(data->mlx, render_next_frame, data);
-	mlx_hook(data->mlx_win, 6, 1L << 6, &mouse_move, data);
-	mlx_loop(data->mlx);
+	hooks(data);
 	return (1);
 }
