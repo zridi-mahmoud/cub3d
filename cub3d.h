@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzridi <mzridi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 20:55:42 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/02 23:25:23 by mzridi           ###   ########.fr       */
+/*   Updated: 2023/05/16 01:39:36 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,12 +109,12 @@ typedef struct cub3D_s
 	char	*east_texture;
 	char	*floor_color;
 	char	*ceiling_color;
-	char 	*floor_color_r;
-	char 	*floor_color_g;
-	char 	*floor_color_b;
-	char 	*ceiling_color_r;
-	char 	*ceiling_color_g;
-	char 	*ceiling_color_b;
+	char	*floor_color_r;
+	char	*floor_color_g;
+	char	*floor_color_b;
+	char	*ceiling_color_r;
+	char	*ceiling_color_g;
+	char	*ceiling_color_b;
 	int		*floor_color_int;
 	int		*ceiling_color_int;
 	int		map_width;
@@ -187,11 +187,5 @@ int			ft_atoi(const char *s1);
 int			ft_isdigit(int c);
 char		*ft_strcat(char *dest, char *src);
 char		*ft_substr(char *s, unsigned int start, size_t len);
-char		*ft_strtrim(char **s1, char *set);
 char		**ft_split(char const *s, char c);
-// static int	_free(char **res, int size);
-// static char	*ft_word(char *s, char c, char **word);
-// static int	ft_count_word(char *s, char c);
-// static int	ft_count_split(char *s, char c);
-
 #endif
