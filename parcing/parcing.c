@@ -6,7 +6,7 @@
 /*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/02 23:29:45 by mzridi            #+#    #+#             */
-/*   Updated: 2023/05/16 16:39:22 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:03:02 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -616,47 +616,16 @@ void hooks(t_var *data)
 	mlx_loop(data->mlx);
 }
 
-// t_line read_map(t_cub3D *cub)
-// {
-// 	t_line	*new_node;
-// 	t_line	*current;
-// 	char	*line;
-
-// 	while ((line = get_next_line(cub->fd)))
-// 	{
-// 		new_node = (t_line *)malloc(sizeof(t_line));
-// 		new_node->line = ft_strdup(line);
-// 		new_node->next = NULL;
-// 		if (head == NULL)
-// 		{
-// 			head = new_node;
-// 			current = new_node;
-// 		}
-// 		else
-// 		{
-// 			current->next = new_node;
-// 			current = new_node;
-// 		}
-// 		free(line);
-// 	}
-// 	close(cub->fd);
-// 	return (head);
-// }
-
-int  is_valid_map( char *filename)
+t_line 	*read_map(t_cub3D *cub)
 {
-	t_var	*data;
-	t_cub3D	*cub;
-	t_line	*head;
+	t_line	*new_node;
 	t_line	*current;
+	t_line 	*head = NULL;
+	char	*line;
 
-	char *line;
-	data = malloc(sizeof(t_var));
-	cub = malloc(sizeof(t_cub3D));
-	check_file(filename, cub);
 	while ((line = get_next_line(cub->fd)))
 	{
-		t_line *new_node = (t_line *)malloc(sizeof(t_line));
+		new_node = (t_line *)malloc(sizeof(t_line));
 		new_node->line = ft_strdup(line);
 		new_node->next = NULL;
 		if (head == NULL)
@@ -672,7 +641,31 @@ int  is_valid_map( char *filename)
 		free(line);
 	}
 	close(cub->fd);
-	t_line *tmp = head;
+	return (head);
+}
+
+int filling(t_cub3D *cub, t_line *tmp)
+{
+	fill_map(cub, tmp);
+	fill_map_back(cub, tmp);
+	if (ft_lsttoarray(tmp, cub))
+		return (0);
+	check_forma(cub, tmp);
+	return (1);
+}
+
+int  is_valid_map( char *filename)
+{
+	t_var	*data;
+	t_cub3D	*cub;
+	t_line	*head;
+	t_line	*tmp;
+
+	data = malloc(sizeof(t_var));
+	cub = malloc(sizeof(t_cub3D));
+	check_file(filename, cub);
+	head = read_map(cub);
+	tmp = head;
 	cub->max_lenght = 0;
 	while (tmp)
 	{
@@ -681,11 +674,8 @@ int  is_valid_map( char *filename)
 		tmp = tmp->next;
 	}
 	tmp = head;
-	fill_map(cub, tmp);
-	fill_map_back(cub, tmp);
-	if (ft_lsttoarray(head, cub))
+	if (!filling(cub, tmp))
 		return (0);
-	check_forma(cub,tmp);
 	data = init_data(cub);
 	if (data == NULL)
 		return (1);

@@ -6,7 +6,7 @@
 /*   By: rel-maza <rel-maza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/16 12:43:35 by rel-maza          #+#    #+#             */
-/*   Updated: 2023/05/16 12:45:59 by rel-maza         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:37:21 by rel-maza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,31 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (result);
 }
 
+int	check_line(char **line, char *buffer)
+{
+	if (buffer[0] == '\n')
+	{
+		*line = ft_strjoin(*line, buffer);
+		free(buffer);
+		return (0);
+	}
+	if (buffer[0] == '\0')
+	{
+		free(buffer);
+		return (0);
+	}
+	*line = ft_strjoin(*line, buffer);
+	return (1);
+}
+
 char	*get_line(int fd)
 {
-	char	*line = NULL;
-	char	*buffer = NULL;
+	char	*line;
+	char	*buffer;
 	int		a;
+
 	buffer = (char *)malloc(sizeof(char) * 2);
+	line = NULL;
 	while (1)
 	{
 		a = read(fd, buffer, 1);
@@ -65,7 +84,6 @@ char	*get_line(int fd)
 		{
 			if (buffer)
 				free(buffer);
-			free(line);
 			return (NULL);
 		}
 		if (a == 0)
@@ -74,30 +92,18 @@ char	*get_line(int fd)
 			return (line);
 		}
 		buffer[1] = 0;
-		if (buffer[0] == '\n')
-		{
-			line = ft_strjoin(line, buffer);
-			free(buffer);
+		if (!check_line(&line, buffer))
 			return (line);
-		}
-		if (buffer[0] == '\0')
-		{
-			free(buffer);
-			return (line);
-		}
-		line = ft_strjoin(line, buffer);
 	}
-	free(buffer);
-	return (line);
+	return (free(buffer), line);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	char *result;
+	char	*result;
 
 	if (fd < 0)
 		return (NULL);
-
 	result = get_line(fd);
 	return (result);
 }
