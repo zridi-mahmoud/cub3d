@@ -31,10 +31,13 @@ $(NAME): $(MLX) $(OBJ)
 %.o: %.c cub3d.h
 	$(CC) $(FLAGS)  -Imlx -c $< -o $@
 
-clean:
+clean_mlx:
+	make clean -C mlx/ 
+
+clean: clean_mlx
 	rm -f $(OBJ) $(BONUS_OBJ)
 
-fclean : clean
-	@rm -rf $(NAME) $(BONUS_NAME)
+fclean : clean clean_mlx
+	@rm -rf $(NAME) $(BONUS_NAME) 
 
 re : fclean all
